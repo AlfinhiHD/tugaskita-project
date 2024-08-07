@@ -1,43 +1,35 @@
 "use client";
 
-// components/Sidebar.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { usePathname } from 'next/navigation';
 import {
   Home,
   ClipboardList,
   Gift,
   Users,
   LogOut,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import NavItem from "./nav-item";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [tugasOpen, setTugasOpen] = useState(false);
+  const pathname = usePathname();
 
-  const NavItem = ({ icon, label, active, onClick, dropdown, path }) => (
-    <Link
-      href={path}
-      className={`flex items-center p-2 rounded-lg cursor-pointer
-        ${active ? "bg-white text-blue-600" : "text-white hover:bg-blue-700"}`}
-      onClick={onClick}
-    >
-      {React.cloneElement(icon, { className: "w-6 h-6 mr-2" })}
-      <span className="flex-1">{label}</span>
-      {dropdown && (
-        <span className="ml-auto">
-          {tugasOpen ? (
-            <ChevronUp className="w-4 h-4" />
-          ) : (
-            <ChevronDown className="w-4 h-4" />
-          )}
-        </span>
-      )}
-    </Link>
-  );
+  useEffect(() => {
+    if (pathname.startsWith("/dashboard")) {
+      setActiveItem("dashboard");
+    } else if (pathname.startsWith("/tugas/daftar-tugas")) {
+      setActiveItem("tugas-daftar");
+    } else if (pathname.startsWith("/tugas/tinjau-tugas")) {
+      setActiveItem("tugas-pengajuan");
+    } else if (pathname.startsWith("/reward")) {
+      setActiveItem("reward");
+    } else if (pathname.startsWith("/siswa")) {
+      setActiveItem("siswa");
+    }
+  }, [pathname]);
 
   return (
     <div className="min-h-screen flex flex-col bg-blue-600 text-white w-64">
@@ -66,7 +58,7 @@ const Sidebar = () => {
             label="Dashboard"
             active={activeItem === "dashboard"}
             onClick={() => setActiveItem("dashboard")}
-            path="dashboard"
+            path="/dashboard"
           />
           <div>
             <NavItem
@@ -75,7 +67,8 @@ const Sidebar = () => {
               active={activeItem.startsWith("tugas")}
               onClick={() => setTugasOpen(!tugasOpen)}
               dropdown
-              path="tugas/tinjau-tugas"
+              open={tugasOpen}
+              noLink
             />
             {tugasOpen && (
               <ul className="ml-6 mt-2 space-y-2">
@@ -84,14 +77,14 @@ const Sidebar = () => {
                   label="Daftar Tugas"
                   active={activeItem === "tugas-daftar"}
                   onClick={() => setActiveItem("tugas-daftar")}
-                  path="tugas/daftar-tugas"
+                  path="/tugas/daftar-tugas"
                 />
                 <NavItem
                   icon={<ClipboardList />}
                   label="Pengajuan Tugas"
                   active={activeItem === "tugas-pengajuan"}
                   onClick={() => setActiveItem("tugas-pengajuan")}
-                  path="tugas/tinjau-tugas"
+                  path="/tugas/tinjau-tugas"
                 />
               </ul>
             )}
@@ -101,21 +94,20 @@ const Sidebar = () => {
             label="Reward"
             active={activeItem === "reward"}
             onClick={() => setActiveItem("reward")}
-            path="tugas/tinjau-tugas"
-            
+            path="/reward"
           />
           <NavItem
             icon={<Users />}
             label="Siswa"
             active={activeItem === "siswa"}
             onClick={() => setActiveItem("siswa")}
-            path="tugas/tinjau-tugas"
+            path="/siswa"
           />
           <NavItem
             icon={<LogOut />}
             label="Logout"
             onClick={() => console.log("Logout clicked")}
-            path="tugas/tinjau-tugas"
+            path="/logout"
           />
         </ul>
       </nav>
