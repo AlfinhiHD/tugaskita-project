@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import Image from "next/image";
 
 const MainTable = ({
   columns,
@@ -92,7 +93,7 @@ const MainTable = ({
   };
 
   return (
-    <div className="mt-12">
+    <div className="mt-6">
       {searchable && (
         <div className="mb-4">
           <Input
@@ -124,51 +125,71 @@ const MainTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item, index) => (
-            <TableRow key={item.id || index}>
-              <TableCell>
-                {(currentPage - 1) * itemsPerPage + index + 1}
+          {data.length === 0 || sortedAndFilteredData.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={columns.length + 1} className="text-center">
+                <div className="flex flex-col items-center justify-center py-8">
+                  <Image
+                    src="/assets/images/zerodata.jpg"
+                    alt="Data tidak tersedia"
+                    width={300}
+                    height={300}
+                  />
+                  <p className="mt-4 text-lg font-medium text-gray-600">
+                    Maaf, data tidak tersedia.
+                  </p>
+                </div>
               </TableCell>
-              {columns.map((column) => (
-                <TableCell key={column.key}>
-                  {column.render ? column.render(item) : item[column.key]}
-                </TableCell>
-              ))}
             </TableRow>
-          ))}
+          ) : (
+            paginatedData.map((item, index) => (
+              <TableRow key={item.id || index}>
+                <TableCell>
+                  {(currentPage - 1) * itemsPerPage + index + 1}
+                </TableCell>
+                {columns.map((column) => (
+                  <TableCell key={column.key}>
+                    {column.render ? column.render(item) : item[column.key]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
 
-      <div className="flex items-center justify-between mt-4">
-        <div className="text-sm font-medium">
-          Menampilkan {(currentPage - 1) * itemsPerPage + 1} -{" "}
-          {Math.min(currentPage * itemsPerPage, sortedAndFilteredData.length)}{" "}
-          dari {sortedAndFilteredData.length} data
+      {data.length !== 0 && sortedAndFilteredData.length !== 0 && (
+        <div className="flex items-center justify-between mt-4">
+          <div className="text-sm font-medium">
+            Menampilkan {(currentPage - 1) * itemsPerPage + 1} -{" "}
+            {Math.min(currentPage * itemsPerPage, sortedAndFilteredData.length)}{" "}
+            dari {sortedAndFilteredData.length} data
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft size={16} />
+            </Button>
+            <span>
+              {currentPage} / {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight size={16} />
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft size={16} />
-          </Button>
-          <span>
-            {currentPage} / {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            <ChevronRight size={16} />
-          </Button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -2,34 +2,62 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
-import {
-  Home,
-  ClipboardList,
-  Gift,
-  Users,
-  LogOut,
-} from "lucide-react";
 import Image from "next/image";
 import NavItem from "./nav-item";
+import { navigationItems } from "../_constant/list";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
-  const [tugasOpen, setTugasOpen] = useState(false);
+  const [openItems, setOpenItems] = useState({});
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname.startsWith("/dashboard")) {
-      setActiveItem("dashboard");
-    } else if (pathname.startsWith("/tugas/daftar-tugas")) {
-      setActiveItem("tugas-daftar");
-    } else if (pathname.startsWith("/tugas/tinjau-tugas")) {
-      setActiveItem("tugas-pengajuan");
-    } else if (pathname.startsWith("/reward")) {
-      setActiveItem("reward");
-    } else if (pathname.startsWith("/siswa")) {
-      setActiveItem("siswa");
-    }
+    const setActiveItemFromPath = (items) => {
+      for (let item of items) {
+        if (pathname.startsWith(item.path)) {
+          setActiveItem(item.id);
+          return;
+        }
+        if (item.subItems) {
+          setActiveItemFromPath(item.subItems);
+        }
+      }
+    };
+
+    setActiveItemFromPath(navigationItems);
   }, [pathname]);
+
+  const toggleOpen = (id) => {
+    setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const renderNavItems = (items, level = 0) => {
+    return items.map((item) => (
+      <div key={item.id}>
+        <NavItem
+          icon={<item.icon />}
+          label={item.label}
+          active={activeItem === item.id || activeItem.startsWith(item.id)}
+          onClick={() => {
+            if (item.subItems) {
+              toggleOpen(item.id);
+            } else {
+              setActiveItem(item.id);
+            }
+          }}
+          dropdown={!!item.subItems}
+          open={openItems[item.id]}
+          noLink={!!item.subItems}
+          path={item.path}
+        />
+        {item.subItems && openItems[item.id] && (
+          <ul className={`ml-6 mt-2 space-y-2`}>
+            {renderNavItems(item.subItems, level + 1)}
+          </ul>
+        )}
+      </div>
+    ));
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-blue-600 text-white w-64">
@@ -53,62 +81,7 @@ const Sidebar = () => {
 
       <nav className="flex-grow overflow-y-auto">
         <ul className="space-y-2 px-4">
-          <NavItem
-            icon={<Home />}
-            label="Dashboard"
-            active={activeItem === "dashboard"}
-            onClick={() => setActiveItem("dashboard")}
-            path="/dashboard"
-          />
-          <div>
-            <NavItem
-              icon={<ClipboardList />}
-              label="Tugas"
-              active={activeItem.startsWith("tugas")}
-              onClick={() => setTugasOpen(!tugasOpen)}
-              dropdown
-              open={tugasOpen}
-              noLink
-            />
-            {tugasOpen && (
-              <ul className="ml-6 mt-2 space-y-2">
-                <NavItem
-                  icon={<ClipboardList />}
-                  label="Daftar Tugas"
-                  active={activeItem === "tugas-daftar"}
-                  onClick={() => setActiveItem("tugas-daftar")}
-                  path="/tugas/daftar-tugas"
-                />
-                <NavItem
-                  icon={<ClipboardList />}
-                  label="Pengajuan Tugas"
-                  active={activeItem === "tugas-pengajuan"}
-                  onClick={() => setActiveItem("tugas-pengajuan")}
-                  path="/tugas/tinjau-tugas"
-                />
-              </ul>
-            )}
-          </div>
-          <NavItem
-            icon={<Gift />}
-            label="Reward"
-            active={activeItem === "reward"}
-            onClick={() => setActiveItem("reward")}
-            path="/reward"
-          />
-          <NavItem
-            icon={<Users />}
-            label="Siswa"
-            active={activeItem === "siswa"}
-            onClick={() => setActiveItem("siswa")}
-            path="/siswa"
-          />
-          <NavItem
-            icon={<LogOut />}
-            label="Logout"
-            onClick={() => console.log("Logout clicked")}
-            path="/logout"
-          />
+          {renderNavItems(navigationItems)}
         </ul>
       </nav>
     </div>
