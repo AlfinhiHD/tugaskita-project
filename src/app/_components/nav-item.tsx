@@ -42,7 +42,7 @@ const NavItem: React.FC<NavItemProps> = ({
   const className = `flex items-center p-2 rounded-lg cursor-pointer
     ${active ? "bg-white text-blue-600" : "text-white hover:bg-blue-700"}`;
 
-  if (noLink) {
+  if (noLink || label === "Logout") {
     return (
       <div className={className} onClick={onClick}>
         {content}

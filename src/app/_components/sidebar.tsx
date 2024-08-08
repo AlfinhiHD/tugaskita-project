@@ -27,6 +27,11 @@ const Sidebar = () => {
     setActiveItemFromPath(navigationItems);
   }, [pathname]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+  };
+
+
   const toggleOpen = (id) => {
     setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
   };
@@ -41,13 +46,15 @@ const Sidebar = () => {
           onClick={() => {
             if (item.subItems) {
               toggleOpen(item.id);
+            } else if (item.id === 'logout') {
+              handleLogout();
             } else {
               setActiveItem(item.id);
             }
           }}
           dropdown={!!item.subItems}
           open={openItems[item.id]}
-          noLink={!!item.subItems}
+          noLink={!!item.subItems || item.id === 'logout'}
           path={item.path}
         />
         {item.subItems && openItems[item.id] && (
