@@ -27,24 +27,18 @@ const MainTable = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [originalData, setOriginalData] = useState(data);
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    setOriginalData(data);
-    setCurrentPage(1);
-  }, [data]);
 
   const sortedAndFilteredData = useMemo(() => {
     let filteredData = searchable
-      ? originalData.filter((item) =>
+      ? data.filter((item) =>
           columns.some((column) =>
             String(item[column.key])
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
           )
         )
-      : originalData;
+      : [...data]; 
 
     if (sortConfig.key !== null) {
       filteredData.sort((a, b) => {
@@ -58,7 +52,7 @@ const MainTable = ({
       });
     }
     return filteredData;
-  }, [originalData, searchTerm, sortConfig, columns, searchable]);
+  }, [data, searchTerm, sortConfig, columns, searchable]);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -68,17 +62,15 @@ const MainTable = ({
   const totalPages = Math.ceil(sortedAndFilteredData.length / itemsPerPage);
 
   const handleSort = (key) => {
-    if (sortConfig.key === key) {
-      if (sortConfig.direction === "ascending") {
-        setSortConfig({ key, direction: "descending" });
-      } else if (sortConfig.direction === "descending") {
-        setSortConfig({ key: null, direction: null });
-      } else {
-        setSortConfig({ key, direction: "ascending" });
+    setSortConfig((prevConfig) => {
+      if (prevConfig.key === key) {
+        if (prevConfig.direction === "ascending") {
+          return { key, direction: "descending" };
+        }
+        return { key: null, direction: null };
       }
-    } else {
-      setSortConfig({ key, direction: "ascending" });
-    }
+      return { key, direction: "ascending" };
+    });
   };
 
   const renderSortIcon = (columnName) => {
