@@ -1,3 +1,4 @@
+import TinjauTugasDialog from "@/app/(auth-admin)/tugas/tinjau-tugas/_components/tinjau-tugas-dialog";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -14,6 +15,8 @@ export const useTinjauTugas = () => {
     setSelectedTask(task);
     setIsDetailDialogOpen(true);
   };
+
+  const [openDialog, setOpenDialog] = useState(null);
 
   const columns = [
     { key: "studentName", header: "Nama Lengkap Siswa", sortable: true },
@@ -42,15 +45,7 @@ export const useTinjauTugas = () => {
     {
       key: "actions",
       header: "Aksi",
-      render: (task) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => handleDetailClick(task)}
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
-      ),
+      render: (task) => <TinjauTugasDialog task={task} openDialog={openDialog} setOpenDialog={setOpenDialog}/>
     },
   ];
 
@@ -59,6 +54,7 @@ export const useTinjauTugas = () => {
       id: 1,
       studentName: "John Doe",
       taskName: "Tugas Matematika",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nostrum distinctio, corporis unde similique dolorem tempore nam nulla obcaecati maxime est, suscipit consectetur modi, facere quasi facilis? Veritatis, sed rerum.",
       points: 10,
       date: "2023-08-15",
       status: "Perlu Review",
@@ -68,6 +64,7 @@ export const useTinjauTugas = () => {
       id: 2,
       studentName: "Jane Smith",
       taskName: "Tugas Bahasa Inggris",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nostrum distinctio, corporis unde similique dolorem tempore nam nulla obcaecati maxime est, suscipit consectetur modi, facere quasi facilis? Veritatis, sed rerum.",
       points: 15,
       date: "2023-08-16",
       status: "Diterima",
@@ -77,6 +74,7 @@ export const useTinjauTugas = () => {
       id: 3,
       studentName: "Alice Johnson",
       taskName: "Tugas Sejarah",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nostrum distinctio, corporis unde similique dolorem tempore nam nulla obcaecati maxime est, suscipit consectetur modi, facere quasi facilis? Veritatis, sed rerum.",
       points: 12,
       date: "2023-08-17",
       status: "Ditolak",
@@ -108,5 +106,7 @@ export const useTinjauTugas = () => {
     handleDetailClick,
     columns,
     filteredData,
+    openDialog,
+    setOpenDialog
   };
 };

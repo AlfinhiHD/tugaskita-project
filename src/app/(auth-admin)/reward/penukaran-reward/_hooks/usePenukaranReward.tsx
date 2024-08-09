@@ -1,3 +1,4 @@
+import PenukaranRewardDialog from "@/app/(auth-admin)/reward/penukaran-reward/_components/penukaran-reward-dialog";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -13,6 +14,8 @@ export const usePenukaranReward = () => {
     setSelectedReward(reward);
     setIsDetailDialogOpen(true);
   };
+
+  const [openDialog, setOpenDialog] = useState(null);
 
   const columns = [
     { key: "studentName", header: "Nama Lengkap Siswa", sortable: true },
@@ -41,15 +44,7 @@ export const usePenukaranReward = () => {
     {
       key: "actions",
       header: "Aksi",
-      render: (reward) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => handleDetailClick(reward)}
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
-      ),
+      render: (reward) => <PenukaranRewardDialog reward={reward} openDialog={openDialog} setOpenDialog={setOpenDialog}/>,
     },
   ];
 
@@ -65,7 +60,7 @@ export const usePenukaranReward = () => {
     },
     {
       id: 2,
-      studentName: "John Doe",
+      studentName: "Jahn Doe",
       rewardName: "Penghapus",
       totalPoints: 10000,
       hargaItem: 500,
@@ -74,7 +69,7 @@ export const usePenukaranReward = () => {
     },
     {
       id: 3,
-      studentName: "John Doe",
+      studentName: "Jzhn Doe",
       rewardName: "Penghapus",
       totalPoints: 10000,
       hargaItem: 500,
@@ -83,7 +78,7 @@ export const usePenukaranReward = () => {
     },
     {
       id: 4,
-      studentName: "John Doe",
+      studentName: "Jchn Doe",
       rewardName: "Penghapus",
       totalPoints: 10000,
       hargaItem: 500,
@@ -92,7 +87,7 @@ export const usePenukaranReward = () => {
     },
     {
       id: 5,
-      studentName: "John Doe",
+      studentName: "Cthn Doe",
       rewardName: "Penghapus",
       totalPoints: 10000,
       hargaItem: 500,
@@ -122,5 +117,7 @@ export const usePenukaranReward = () => {
     handleDetailClick,
     columns,
     filteredData,
+    openDialog,
+    setOpenDialog
   };
 };

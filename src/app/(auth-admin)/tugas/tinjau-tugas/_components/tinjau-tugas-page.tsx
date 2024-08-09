@@ -1,23 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import MainTable from "@/app/_components/main-table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useTinjauTugas } from "../_hooks/useTinjauTugas";
+import React from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import MainTable from '@/app/_components/main-table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useTinjauTugas } from '../_hooks/useTinjauTugas';
 
 const TinjauTugas = () => {
   const {
@@ -40,11 +29,7 @@ const TinjauTugas = () => {
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-8">Tinjau Tugas</h1>
 
-      <Tabs
-        defaultValue="submit"
-        onValueChange={setActiveTab}
-        className="w-full"
-      >
+      <Tabs defaultValue="submit" onValueChange={setActiveTab} className="w-full">
         <TabsList className="w-full">
           <TabsTrigger
             value="submit"
@@ -61,12 +46,7 @@ const TinjauTugas = () => {
         </TabsList>
 
         <div className="mt-8 flex justify-between">
-          <Input
-            placeholder="Cari nama siswa..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
-          />
+          <Input placeholder="Cari nama siswa..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
           <div className="flex space-x-4">
             <Select onValueChange={setStatusFilter} value={statusFilter}>
               <SelectTrigger className="w-56">
@@ -79,60 +59,18 @@ const TinjauTugas = () => {
                 <SelectItem value="Ditolak">Ditolak</SelectItem>
               </SelectContent>
             </Select>
-            <Input
-              className="w-40"
-              type="date"
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-            />
+            <Input className="w-40" type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
           </div>
         </div>
 
         <TabsContent value="submit">
-          <MainTable
-            columns={columns}
-            data={filteredData}
-            searchable={false}
-            itemsPerPage={10}
-          />
+          <MainTable columns={columns} data={filteredData} searchable={false} itemsPerPage={10} />
         </TabsContent>
 
         <TabsContent value="pengajuan">
-          <MainTable
-            columns={columns}
-            data={filteredData}
-            searchable={false}
-            itemsPerPage={10}
-          />
+          <MainTable columns={columns} data={filteredData} searchable={false} itemsPerPage={10} />
         </TabsContent>
       </Tabs>
-
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Detail Tugas</DialogTitle>
-          </DialogHeader>
-          {selectedTask && (
-            <div>
-              <p>
-                <strong>Nama Siswa:</strong> {selectedTask.studentName}
-              </p>
-              <p>
-                <strong>Task:</strong> {selectedTask.taskName}
-              </p>
-              <p>
-                <strong>Point:</strong> {selectedTask.points}
-              </p>
-              <p>
-                <strong>Tanggal:</strong> {selectedTask.date}
-              </p>
-              <p>
-                <strong>Status:</strong> {selectedTask.status}
-              </p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

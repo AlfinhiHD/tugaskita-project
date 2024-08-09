@@ -50,11 +50,5 @@ export const navigationItems = [
     label: "Siswa",
     path: "/siswa",
     id: "siswa",
-  },
-  {
-    icon: LogOut,
-    label: "Logout",
-    path: "/logout",
-    id: "logout",
-  },
+  }
 ];
