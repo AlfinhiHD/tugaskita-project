@@ -89,7 +89,7 @@ const MainTable = ({
         <ChevronDown size={16} />
       );
     }
-    return <div className="w-4"></div>;
+    return <div className="w-4 hidden"></div>;
   };
 
   return (
@@ -109,14 +109,14 @@ const MainTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>No</TableHead>
+            <TableHead className="text-center">No</TableHead>
             {columns.map((column) => (
               <TableHead
                 key={column.key}
                 onClick={() => column.sortable && handleSort(column.key)}
-                className={column.sortable ? "cursor-pointer" : ""}
+                className={`text-center {column.sortable ? "cursor-pointer" : ""}`}
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-center gap-x-4">
                   {column.header}
                   {column.sortable && renderSortIcon(column.key)}
                 </div>
@@ -124,7 +124,7 @@ const MainTable = ({
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="text-center">
           {data.length === 0 || sortedAndFilteredData.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length + 1} className="text-center">
