@@ -20,12 +20,12 @@ const TaskDialog = ({ task, openDialog, setOpenDialog }) => {
           <DialogTitle>{task.title}</DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <p className="text-base">
+          {/* <p className="text-base">
             <strong>Description:</strong> <br />
             <span className="text-sm font-light">{task.description}</span>
-          </p>
+          </p> */}
           <p className="text-base mt-2">
-            <strong>Points:</strong> {task.points}
+            <strong>Points:</strong> {task.point}
           </p>
           <div className="flex justify-between mt-8">
             <p className="text-base">
