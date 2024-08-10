@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import Image from "next/image";
-import NavItem from "./nav-item";
-import { navigationItems } from "../_constant/list";
+import Image from 'next/image';
+import NavItem from './nav-item';
+import { navigationItems } from '../_constant/list';
+import { LogOut } from 'lucide-react';
 
 const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState("dashboard");
+  const [activeItem, setActiveItem] = useState('dashboard');
   const [openItems, setOpenItems] = useState({});
   const pathname = usePathname();
 
@@ -31,9 +32,8 @@ const Sidebar = () => {
     localStorage.removeItem('token');
   };
 
-
   const toggleOpen = (id) => {
-    setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
+    setOpenItems((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const renderNavItems = (items, level = 0) => {
@@ -57,11 +57,7 @@ const Sidebar = () => {
           noLink={!!item.subItems || item.id === 'logout'}
           path={item.path}
         />
-        {item.subItems && openItems[item.id] && (
-          <ul className={`ml-6 mt-2 space-y-2`}>
-            {renderNavItems(item.subItems, level + 1)}
-          </ul>
-        )}
+        {item.subItems && openItems[item.id] && <ul className={`ml-6 mt-2 space-y-2`}>{renderNavItems(item.subItems, level + 1)}</ul>}
       </div>
     ));
   };
@@ -70,12 +66,7 @@ const Sidebar = () => {
     <div className="min-h-screen flex flex-col bg-blue-600 text-white w-64">
       <div className="p-4">
         <div className="flex items-center mb-8">
-          <Image
-            src="/assets/logo/logo-tugaskita.png"
-            alt="TugasKita logo"
-            width={40}
-            height={40}
-          />
+          <Image src="/assets/logo/logo-tugaskita.png" alt="TugasKita logo" width={40} height={40} />
           <h1 className="text-2xl font-bold ml-2">TugasKita</h1>
         </div>
 
@@ -87,10 +78,12 @@ const Sidebar = () => {
       </div>
 
       <nav className="flex-grow overflow-y-auto">
-        <ul className="space-y-2 px-4">
-          {renderNavItems(navigationItems)}
-        </ul>
+        <ul className="space-y-2 px-4">{renderNavItems(navigationItems)}</ul>
       </nav>
+
+      <div className="p-4 mt-auto">
+        <NavItem icon={<LogOut />} label="Logout" onClick={handleLogout} noLink={true} />
+      </div>
     </div>
   );
 };
