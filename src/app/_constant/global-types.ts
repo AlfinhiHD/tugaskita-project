@@ -4,13 +4,11 @@ export type LoginValue = {
     rememberMe: boolean
 }
 
-//********************************/
 export type ResponseDTO<T> = {
     data: T;
     message: string;
   };
   
-
 export type TugasType = {
     id: string;
     title: string;

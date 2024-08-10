@@ -62,7 +62,7 @@ const useDashboard = () => {
 
   return {
     todaysTasks : tasks.data,
-    topRank,
+    topRank: topRank.data,
     columns,
     loadingtopRank,
     loadingTasks

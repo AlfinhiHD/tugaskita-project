@@ -34,7 +34,7 @@ const Dashboard = () => {
             )}
           </CardContent>
         </Card>
-        
+
         <Card className="w-full bg-blue-200">
           <CardHeader>
             <CardTitle>Top 15 Siswa Bulan Ini</CardTitle>
@@ -44,7 +44,7 @@ const Dashboard = () => {
               <DashboardTopRankSkeleton />
             ) : (
               <ul className="space-y-4">
-                {topRank?.data?.map((student, index) => (
+                {topRank?.map((student, index) => (
                   <li key={index} className="flex items-center">
                     <span className="w-6 text-gray-500">{index + 1}.</span>
                     <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
