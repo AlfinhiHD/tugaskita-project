@@ -6,8 +6,15 @@ const getTopRank = async () => {
   return res.data;
 };
 
+const getAllSiswa = async () => {
+  const res = await instance.get("/user");
+
+  return res.data;
+}
+
 const SiswaService = {
   getTopRank,
+  getAllSiswa
 };
 
 export default SiswaService;

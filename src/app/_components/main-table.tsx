@@ -30,16 +30,20 @@ const MainTable = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   const sortedAndFilteredData = useMemo(() => {
+    if (!Array.isArray(data)) {
+      return [];
+    }
+  
     let filteredData = searchable
-      ? data.filter((item) =>
+      ? data?.filter((item) =>
           columns.some((column) =>
             String(item[column.key])
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
           )
         )
-      : [...data]; 
-
+      : [...data];
+  
     if (sortConfig.key !== null) {
       filteredData.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -51,9 +55,11 @@ const MainTable = ({
         return 0;
       });
     }
+  
     return filteredData;
   }, [data, searchTerm, sortConfig, columns, searchable]);
-
+  
+  
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return sortedAndFilteredData.slice(startIndex, startIndex + itemsPerPage);
@@ -117,7 +123,7 @@ const MainTable = ({
           </TableRow>
         </TableHeader>
         <TableBody className="text-center">
-          {data.length === 0 || sortedAndFilteredData.length === 0 ? (
+          {data?.length === 0 || sortedAndFilteredData.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length + 1} className="text-center">
                 <div className="flex flex-col items-center justify-center py-8">
@@ -150,7 +156,7 @@ const MainTable = ({
         </TableBody>
       </Table>
 
-      {data.length !== 0 && sortedAndFilteredData.length !== 0 && (
+      {data?.length !== 0 && sortedAndFilteredData.length !== 0 && (
         <div className="flex items-center justify-between mt-4">
           <div className="text-sm font-medium">
             Menampilkan {(currentPage - 1) * itemsPerPage + 1} -{" "}

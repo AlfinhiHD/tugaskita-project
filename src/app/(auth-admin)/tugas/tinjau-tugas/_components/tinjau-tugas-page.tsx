@@ -22,8 +22,10 @@ const TinjauTugas = () => {
     dateFilter,
     setDateFilter,
     columns,
-    filteredData,
+    filteredData
   } = useTinjauTugas();
+
+  console.log(filteredData)
 
   return (
     <div className="p-8">

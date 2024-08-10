@@ -2,46 +2,18 @@ import { Button } from '@/components/ui/button';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ResponseDTO, SiswaType } from "@/app/_constant/global-types";
+import SiswaService from "@/app/_services/siswa-service";
+import useSWR from "swr";
 import SiswaDialog from '../_components/siswa-dialog';
 
 const useSiswa = () => {
-  const [siswa] = useState([
-    {
-      id: 1,
-      name: 'Jono',
-      totalPoints: 5000,
-      email: 'jono@gmail.com',
-      tugasSelesai: 25,
-    },
-    {
-      id: 2,
-      name: 'Jono',
-      totalPoints: 5000,
-      email: 'jono@gmail.com',
-      tugasSelesai: 25,
-    },
-    {
-      id: 3,
-      name: 'Jono',
-      totalPoints: 5000,
-      email: 'jono@gmail.com',
-      tugasSelesai: 25,
-    },
-    {
-      id: 4,
-      name: 'Jono',
-      totalPoints: 5000,
-      email: 'jono@gmail.com',
-      tugasSelesai: 25,
-    },
-    {
-      id: 5,
-      name: 'Jono',
-      totalPoints: 5000,
-      email: 'jono@gmail.com',
-      tugasSelesai: 25,
-    },
-  ]);
+  const {
+    data: siswa,
+    error: errorTasks,
+    mutate: mutateTasks,
+    isLoading: loadingTasks,
+  } = useSWR<ResponseDTO<SiswaType[]>, Error>(['/admin-task'], () => SiswaService.getAllSiswa());
 
   const [openDialog, setOpenDialog] = useState(null);
 
@@ -58,7 +30,7 @@ const useSiswa = () => {
   const columns = [
     { key: 'name', header: 'Nama Siswa', sortable: true },
     { key: 'email', header: 'Email', sortable: true },
-    { key: 'totalPoints', header: 'Total Point', sortable: true },
+    { key: 'point', header: 'Total Point', sortable: true },
     {
       key: 'actions',
       header: 'Aksi',
@@ -77,7 +49,8 @@ const useSiswa = () => {
   ];
 
   return {
-    siswa,
+    siswa : siswa?.data,
+    loadingTasks,
     isDetailDialogOpen,
     setIsDetailDialogOpen,
     selectedSiswa,

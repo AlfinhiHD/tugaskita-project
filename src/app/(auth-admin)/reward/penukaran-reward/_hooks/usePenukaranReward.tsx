@@ -1,7 +1,10 @@
 import PenukaranRewardDialog from "@/app/(auth-admin)/reward/penukaran-reward/_components/penukaran-reward-dialog";
+import { RedeemRewardType, ResponseDTO, TugasType } from "@/app/_constant/global-types";
+import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { useState } from "react";
+import RewardService from "@/app/_services/reward-service";
 
 export const usePenukaranReward = () => {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
@@ -18,26 +21,26 @@ export const usePenukaranReward = () => {
   const [openDialog, setOpenDialog] = useState(null);
 
   const columns = [
-    { key: "studentName", header: "Nama Lengkap Siswa", sortable: true },
-    { key: "rewardName", header: "Reward", sortable: true },
-    { key: "hargaItem", header: "Point Yang Dibutuhkan", sortable: true },
-    { key: "date", header: "Tanggal", sortable: true },
+    { key: "UserName", header: "Nama Lengkap Siswa", sortable: true },
+    { key: "RewardName", header: "Reward", sortable: true },
+    { key: "HargaItem", header: "Point Yang Dibutuhkan", sortable: true },
+    { key: "Date", header: "Tanggal", sortable: true },
     {
-      key: "status",
+      key: "Status",
       header: "Status",
       sortable: true,
       render: (reward) => (
         <span
           className={`px-2 py-1 rounded-full text-xs font-semibold
           ${
-            reward.status === "Perlu Review"
+            reward.Status === "Perlu Review"
               ? "bg-yellow-200 text-yellow-800"
-              : reward.status === "Diterima"
+              : reward.Status === "Done"
               ? "bg-green-200 text-green-800"
               : "bg-red-200 text-red-800"
           }`}
         >
-          {reward.status}
+          {reward.Status}
         </span>
       ),
     },
@@ -48,59 +51,19 @@ export const usePenukaranReward = () => {
     },
   ];
 
-  const dummyData = [
-    {
-      id: 1,
-      studentName: "John Doe",
-      rewardName: "Penghapus",
-      totalPoints: 10000,
-      hargaItem: 500,
-      date: "2023-08-15",
-      status: "Perlu Review",
-    },
-    {
-      id: 2,
-      studentName: "Jahn Doe",
-      rewardName: "Penghapus",
-      totalPoints: 10000,
-      hargaItem: 500,
-      date: "2023-08-15",
-      status: "Diterima",
-    },
-    {
-      id: 3,
-      studentName: "Jzhn Doe",
-      rewardName: "Penghapus",
-      totalPoints: 10000,
-      hargaItem: 500,
-      date: "2023-08-15",
-      status: "Ditolak",
-    },
-    {
-      id: 4,
-      studentName: "Jchn Doe",
-      rewardName: "Penghapus",
-      totalPoints: 10000,
-      hargaItem: 500,
-      date: "2023-08-15",
-      status: "Perlu Review",
-    },
-    {
-      id: 5,
-      studentName: "Cthn Doe",
-      rewardName: "Penghapus",
-      totalPoints: 10000,
-      hargaItem: 500,
-      date: "2023-08-15",
-      status: "Perlu Review",
-    },
-  ];
+  const {
+    data: rewards,
+    error: errorTasks,
+    mutate: mutateTasks,
+    isLoading: loadingTasks,
+  } = useSWR<ResponseDTO<RedeemRewardType[]>, Error>(["/admin-reward/user"], () =>
+    RewardService.getRedeemReward()
+  );
 
-  const filteredData = dummyData.filter(
+  const filteredData = rewards?.data.filter(
     (reward) =>
-      reward.studentName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (statusFilter === "all" || reward.status === statusFilter) &&
-      (dateFilter === "" || reward.date === dateFilter)
+      reward?.UserName?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (statusFilter === "all" || reward.Status === statusFilter)
   );
 
   return {
