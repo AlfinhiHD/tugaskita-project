@@ -5,7 +5,11 @@ import { Pencil } from 'lucide-react';
 import Image from 'next/image';
 
 const TinjauTugasDialog = ({ task, openDialog, setOpenDialog }) => {
-  if (!task) return null; // Ensure task is not null before rendering
+  if (!task) return null;
+
+  const formattedDate = isNaN(new Date(task.CreatedAt).getTime())
+    ? 'Tanggal tidak valid'
+    : new Date(task.CreatedAt).toISOString().split('T')[0];
 
   return (
     <Dialog open={openDialog === task.id} onOpenChange={(open) => setOpenDialog(open ? task.id : null)}>
@@ -17,24 +21,24 @@ const TinjauTugasDialog = ({ task, openDialog, setOpenDialog }) => {
       <DialogContent className="min-w-[50%]">
         <DialogHeader>
           <Image src="/assets/images/dialog-header.png" alt="Dialog Header" width={32} height={36} />
-          <DialogTitle>{task.taskName}</DialogTitle>
+          <DialogTitle>{task.Title}</DialogTitle>
           <div
             className={`rounded-xl py-2 px-3 font-semibold ${
-              task.status === 'Diterima'
+              task.Status === 'Diterima'
                 ? 'bg-green-400 text-green-800'
-                : task.status === 'Perlu Review'
+                : task.Status === 'Perlu Review'
                 ? 'bg-yellow-400 text-yellow-800'
-                : task.status === 'Ditolak'
+                : task.Status === 'Ditolak'
                 ? 'bg-red-400 text-red-800'
                 : 'bg-gray-400'
             }`}
           >
-            {task.status}
+            {task.Status}
           </div>
         </DialogHeader>
         <div className="mt-4 flex gap-8">
           <Image
-            src="/assets/images/default-image.jpg"
+            src={task.Image}
             alt="No pic found"
             width={140}
             height={100}
@@ -43,15 +47,15 @@ const TinjauTugasDialog = ({ task, openDialog, setOpenDialog }) => {
           <div>
             <p className="text-base/8">
               <strong>Nama Siswa : </strong>
-              <span className="font-light">{task.studentName}</span>
+              <span className="font-light">{task.UserName}</span>
             </p>
             <p className="text-base/8 mt-2">
               <strong>Tanggal Pengajuan : </strong>
-              <span className="font-light">{task.date}</span>
+              <span className="font-light">{formattedDate}</span>
             </p>
             <p className="text-base/8 mt-2">
               <strong>Keterangan Siswa : </strong> <br />
-              <span className="text-sm font-light">{task.description}</span>
+              <span className="text-sm font-light">{task.Description}</span>
             </p>
           </div>
         </div>

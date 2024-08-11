@@ -12,9 +12,36 @@ const getRedeemReward = async () => {
     return res.data;
 }
 
+const getSingleReward = async (rewardId) => {
+  const res = await instance.get(`/admin-task/${rewardId}`);
+
+  return res.data;
+};
+
+const createReward = async (newReward) => {
+  const res = await instance.post('/admin-reward', newReward);
+
+  return res.data;
+}
+
+const updateReward = async (rewardId, updatedReward) => {
+  const res = await instance.put(`/admin-reward/${rewardId}`, updatedReward);
+
+  return res.data;
+}
+
+const deleteReward = async (taskId) => {
+  const res = await instance.delete(`/admin-reward/${taskId}`);
+  return res.data;
+}
+
 const RewardService = {
     getReward,
-    getRedeemReward
+    getRedeemReward,
+    getSingleReward,
+    createReward,
+    updateReward,
+    deleteReward
 };
 
 export default RewardService

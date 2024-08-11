@@ -23,11 +23,17 @@ const updateTugas = async (taskId, updatedTugas) => {
   return res.data;
 };
 
+const deleteTugas = async (taskId) => {
+  const res = await instance.delete(`/admin-task/${taskId}`);
+  return res.data;
+};
+
 const TugasService = {
-    getTugas,
-    getTinjauTugas,
-    createTugas,
-    updateTugas
+  getTugas,
+  getTinjauTugas,
+  createTugas,
+  updateTugas,
+  deleteTugas
 };
 
 export default TugasService

@@ -2,10 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { ResponseDTO, SiswaType } from "@/app/_constant/global-types";
-import SiswaService from "@/app/_services/siswa-service";
-import useSWR from "swr";
+import { ResponseDTO, SiswaType } from '@/app/_constant/global-types';
+import SiswaService from '@/app/_services/siswa-service';
+import useSWR from 'swr';
 import SiswaDialog from '../_components/siswa-dialog';
+import Swal from 'sweetalert2';
 
 const useSiswa = () => {
   const {
@@ -27,6 +28,27 @@ const useSiswa = () => {
     setIsDetailDialogOpen(true);
   };
 
+  const handleDeleteClick = async (siswaId) => {
+    const result = await Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: 'Data siswa yang dihapus tidak dapat dikembalikan!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Hapus data siswa!',
+      cancelButtonText: 'Tidak, Batalkan!',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await SiswaService.deleteSiswa(siswaId);
+        mutateTasks();
+        Swal.fire('Berhasil!', 'Data siswa berhasil dihapus dengan sukses.', 'success');
+      } catch (error) {
+        Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data siswa.', 'error');
+      }
+    }
+  };
+
   const columns = [
     { key: 'name', header: 'Nama Siswa', sortable: true },
     { key: 'email', header: 'Email', sortable: true },
@@ -40,7 +62,7 @@ const useSiswa = () => {
           <Button variant="ghost" size="sm" onClick={() => router.push(`/siswa/${siswa.id}`)}>
             <Pencil className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700">
+          <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700" onClick={() => handleDeleteClick(siswa.id)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </>
@@ -49,7 +71,7 @@ const useSiswa = () => {
   ];
 
   return {
-    siswa : siswa?.data,
+    siswa: siswa?.data,
     loadingTasks,
     isDetailDialogOpen,
     setIsDetailDialogOpen,
