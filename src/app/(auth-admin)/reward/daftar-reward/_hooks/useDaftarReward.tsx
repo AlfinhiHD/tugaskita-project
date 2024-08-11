@@ -1,48 +1,22 @@
 import DaftarRewardDialog from '../_components/daftar-reward-dialog';
+import { ResponseDTO, RewardType } from "@/app/_constant/global-types";
+import RewardService from "@/app/_services/reward-service";
+import useSWR from "swr";
 import { Button } from '@/components/ui/button';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
-import { headers } from 'next/headers';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 
 const useDaftarReward = () => {
-  const [rewards] = useState([
-    {
-      id: 1,
-      name: 'Reward 1',
-      stok: 15,
-      image: '/assets/images/default-image.jpg',
-      points: 10,
-    },
-    {
-      id: 2,
-      name: 'Reward 1',
-      stok: 15,
-      image: '/assets/images/default-image.jpg',
-      points: 10,
-    },
-    {
-      id: 3,
-      name: 'Reward 1',
-      stok: 15,
-      image: '/assets/images/default-image.jpg',
-      points: 10,
-    },
-    {
-      id: 4,
-      name: 'Reward 1',
-      stok: 15,
-      image: '/assets/images/default-image.jpg',
-      points: 10,
-    },
-    {
-      id: 5,
-      name: 'Reward 1',
-      stok: 15,
-      image: '/assets/images/default-image.jpg',
-      points: 10,
-    },
-  ]);
+  const {
+    data: rewards,
+    error: errorTasks,
+    mutate: mutateTasks,
+    isLoading: loadingTasks,
+  } = useSWR<ResponseDTO<RewardType[]>, Error>(["/admin-task"], () =>
+    RewardService.getReward()
+  );
 
   const [openDialog, setOpenDialog] = useState(null);
 
@@ -56,20 +30,46 @@ const useDaftarReward = () => {
     setIsDetailDialogOpen(true);
   };
 
+  const handleDeleteClick = async (rewardId) => {
+    const result = await Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: "Reward yang dihapus tidak dapat dikembalikan!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Hapus reward!',
+      cancelButtonText: 'Tidak, Batalkan!'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await RewardService.deleteReward(rewardId);
+        mutateTasks();
+        Swal.fire('Berhasil!', 'Reward berhasil dihapus dengan sukses.', 'success');
+      } catch (error) {
+        Swal.fire('Error!', 'Terjadi kesalahan saat menghapus reward.', 'error');
+      }
+    }
+  };
+
   const columns = [
-    { key: 'name', header: 'Nama Reward', sortable: true },
-    { key: 'points', header: 'Point', sortable: true },
-    { key: 'stok', header: 'Stok Reward', sortable: true },
+    { key: 'Name', header: 'Nama Reward', sortable: true },
+    { key: 'Price', header: 'Harga (Poin)', sortable: true },
+    { key: 'Stock', header: 'Stok Reward', sortable: true },
     {
       key: 'actions',
       header: 'Aksi',
       render: (reward) => (
         <>
           <DaftarRewardDialog reward={reward} openDialog={openDialog} setOpenDialog={setOpenDialog}/>
-          <Button variant="ghost" size="sm" onClick={() => router.push(`/reward/daftar-reward/${reward.rewardId}`)}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/reward/daftar-reward/${reward?.ID}`)}>
             <Pencil className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-red-500 hover:text-red-700"
+            onClick={() => handleDeleteClick(reward.ID)}
+          >
             <Trash2 className="h-4 w-4" />
           </Button>
         </>
@@ -78,7 +78,8 @@ const useDaftarReward = () => {
   ];
 
   return {
-    rewards,
+    rewards : rewards?.data,
+    loadingTasks,
     isDetailDialogOpen,
     setIsDetailDialogOpen,
     selectedReward,

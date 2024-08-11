@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 
 const TaskList = () => {
   const router = useRouter();   
-  const { tasks, columns } = useDaftarTugas();
+  const { todaysTasks, columns } = useDaftarTugas();
 
   return (
     <div className="p-8">
@@ -24,7 +24,7 @@ const TaskList = () => {
         </Button>
       </div>
 
-      <MainTable columns={columns} data={tasks} searchable={true} itemsPerPage={10} />
+      <MainTable columns={columns} data={todaysTasks} searchable={true} itemsPerPage={10} />
     </div>
   );
 };

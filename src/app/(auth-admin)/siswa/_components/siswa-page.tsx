@@ -23,6 +23,7 @@ const SiswaPage = () => {
     setIsDetailDialogOpen,
     selectedSiswa,
     columns,
+    loadingTasks
   } = useSiswa();
 
   return (
