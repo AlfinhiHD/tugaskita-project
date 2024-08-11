@@ -72,7 +72,7 @@ const Sidebar = () => {
 
         <div className="mb-4">
           <p className="text-md">
-            Halo, <b>Admin 1</b>
+            Halo, <b>Admin</b>
           </p>
         </div>
       </div>
