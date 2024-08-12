@@ -53,7 +53,7 @@ const useDaftarTugas = () => {
       render: (task) => (
         <>
           <TaskDialog task={task} openDialog={openDialog} setOpenDialog={setOpenDialog} />
-          <Button variant="ghost" size="sm" onClick={() => router.push(`/tugas/daftar-tugas/form/${task.id}`)}>
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/tugas/daftar-tugas/${task.id}`)}>
             <Pencil className="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700" onClick={() => handleDelete(task.id)}>

@@ -13,7 +13,7 @@ const getRedeemReward = async () => {
 }
 
 const getSingleReward = async (rewardId) => {
-  const res = await instance.get(`/admin-task/${rewardId}`);
+  const res = await instance.get(`/admin-reward/${rewardId}`);
 
   return res.data;
 };
