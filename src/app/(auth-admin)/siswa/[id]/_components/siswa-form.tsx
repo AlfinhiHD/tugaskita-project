@@ -19,8 +19,8 @@ const studentSchema = z
   .object({
     name: z.string().min(1, { message: 'Nama siswa harus diisi' }),
     email: z.string().email({ message: 'Email tidak valid' }),
-    password: z.string().min(6, { message: 'Kata sandi harus minimal 6 karakter' }),
-    confirmPassword: z.string().min(6, { message: 'Kata sandi harus minimal 6 karakter' }),
+    password: z.string().min(6, { message: 'Kata sandi harus diisi' }),
+    confirmPassword: z.string().min(6, { message: 'Konfirmasi kata sandi harus diisi' }),
     image: z
       .any()
       .refine((files) => files?.length == 1, 'Harus upload satu gambar.')
@@ -28,7 +28,7 @@ const studentSchema = z
       .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), 'Format file tidak valid'),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
+    if (password && confirmPassword !== password) {
       ctx.addIssue({
         code: 'custom',
         message: 'Password tidak sama',
@@ -57,13 +57,35 @@ const StudentForm = () => {
     },
   });
 
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      if (isEditMode) {
+        try {
+          const studentData = await SiswaService.getSingleSiswa(params.id);
+          form.setValue('name', studentData.data.name);
+          form.setValue('email', studentData.data.email);
+          setPreviewUrl(studentData.imageUrl);
+        } catch (error) {
+          console.error('Failed to fetch student data:', error);
+          Swal.fire('Error', 'Gagal memuat data siswa', 'error');
+        }
+      }
+    };
+
+    fetchStudentData();
+  }, [isEditMode, params.id, form]);
+
   const onSubmit = async (data: StudentFormData) => {
     const { confirmPassword, ...submitData } = data;
 
     const formData = new FormData();
     formData.append('name', submitData.name);
     formData.append('email', submitData.email);
-    formData.append('password', submitData.password);
+
+    if (submitData.password) {
+      formData.append('password', submitData.password);
+    }
+
     formData.append('image', submitData.image[0]);
 
     try {
@@ -144,7 +166,7 @@ const StudentForm = () => {
                   Kata Sandi <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" {...field} required />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -160,7 +182,7 @@ const StudentForm = () => {
                   Konfirmasi Kata Sandi <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" {...field} required />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -172,7 +194,9 @@ const StudentForm = () => {
             name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Upload Gambar Siswa</FormLabel>
+                <FormLabel>
+                  Upload Gambar Siswa <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <div className="flex flex-col items-center justify-center w-full">
                     <label
@@ -190,7 +214,16 @@ const StudentForm = () => {
                         </div>
                       )}
                     </label>
-                    <Input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                    <Input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(event) => {
+                        handleImageChange(event);
+                        field.onChange(event.target.files);
+                      }}
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />

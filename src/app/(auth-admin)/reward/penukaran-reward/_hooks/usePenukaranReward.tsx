@@ -23,7 +23,7 @@ export const usePenukaranReward = () => {
   const columns = [
     { key: "UserName", header: "Nama Lengkap Siswa", sortable: true },
     { key: "RewardName", header: "Reward", sortable: true },
-    { key: "HargaItem", header: "Point Yang Dibutuhkan", sortable: true },
+    { key: "Price", header: "Point Yang Dibutuhkan", sortable: true },
     { key: "Date", header: "Tanggal", sortable: true },
     {
       key: "Status",

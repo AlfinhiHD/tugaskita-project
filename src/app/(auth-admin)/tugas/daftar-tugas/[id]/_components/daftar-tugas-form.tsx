@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,19 +17,7 @@ const taskSchema = z.object({
   start_date: z.string().min(1, { message: 'Tanggal mulai harus diisi' }),
   end_date: z.string().min(1, { message: 'Tanggal selesai harus diisi' }),
   description: z.string().min(1, { message: 'Deskripsi tugas harus diisi' }),
-  point: z
-    .string()
-    .min(1, { message: 'Poin harus diisi' })
-    .regex(/^\d+$/, { message: 'Poin harus berupa angka bulat positif' })
-    .refine(
-      (val) => {
-        const num = parseInt(val, 10);
-        return num > 0;
-      },
-      {
-        message: 'Poin harus lebih besar dari 0',
-      }
-    ),
+  point: z.number().min(1, { message: 'Poin harus lebih besar dari 0' }),
 });
 
 type TaskFormData = z.infer<typeof taskSchema>;
@@ -39,6 +27,8 @@ const TaskForm = () => {
   const params = useParams();
   const isEditMode = params.id !== 'form';
 
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
   const form = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -46,43 +36,47 @@ const TaskForm = () => {
       start_date: '',
       end_date: '',
       description: '',
-      point: '',
+      point: 0,
     },
   });
 
   useEffect(() => {
-    if (isEditMode) {
-      console.log(params.id);
-    }
+    const fetchTaskData = async () => {
+      if (isEditMode) {
+        try {
+          const taskData = await TugasService.getDetailTask(params.id);
+          form.setValue('title', taskData.data.title);
+          form.setValue('start_date', taskData.data.start_date);
+          form.setValue('end_date', taskData.data.end_date);
+          form.setValue('description', taskData.data.description);
+          form.setValue('point', taskData.data.point);
+        } catch (error) {
+          console.error('Failed to fetch task data:', error);
+          Swal.fire('Error', 'Gagal memuat data tugas', 'error');
+        }
+      }
+    };
+
+    fetchTaskData();
   }, [isEditMode, params.id, form]);
 
   const onSubmit = async (data: TaskFormData) => {
     try {
       const formattedData = {
         ...data,
-        point: parseInt(data.point, 10),
       };
-      console.log(formattedData);
 
       if (isEditMode) {
-        try {
-          await TugasService.updateTugas(params.id, formattedData);
-          Swal.fire('Success', 'Berhasil mengubah tugas!', 'success');
-          router.push('/tugas/daftar-tugas');
-        } catch (error) {
-          Swal.fire('Error', 'Gagal mengubah tugas!', 'error');
-        }
+        await TugasService.updateTugas(params.id, formattedData);
+        Swal.fire('Success', 'Berhasil mengubah tugas!', 'success');
       } else {
-        try {
-          await TugasService.createTugas(formattedData);
-          Swal.fire('Success', 'Berhasil menambahkan tugas baru!', 'success');
-          router.push('/tugas/daftar-tugas');
-        } catch (error) {
-          Swal.fire('Error', 'Gagal menambahkan tugas baru!', 'error');
-        }
+        await TugasService.createTugas(formattedData);
+        Swal.fire('Success', 'Berhasil menambahkan tugas baru!', 'success');
       }
+      router.push('/tugas/daftar-tugas');
     } catch (error) {
-      Swal.fire('Error', 'Terjadi error!', 'error');
+      console.error('Error submitting task:', error);
+      Swal.fire('Error', 'Terjadi kesalahan saat submit data tugas', 'error');
     }
   };
 

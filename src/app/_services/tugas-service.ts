@@ -12,6 +12,12 @@ const getTinjauTugas = async () => {
   return res.data
 }
 
+const getDetailTask = async (taskId) => {
+  const res = await instance.get(`/admin-task/${taskId}`);
+
+  return res.data
+}
+
 const createTugas = async (newTugas) => {
   const res = await instance.post('/admin-task', newTugas);
 
@@ -33,7 +39,8 @@ const TugasService = {
   getTinjauTugas,
   createTugas,
   updateTugas,
-  deleteTugas
+  deleteTugas,
+  getDetailTask
 };
 
 export default TugasService

@@ -19,7 +19,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="w-full bg-blue-200">
           <CardHeader>
-            <CardTitle>Tugas Hari Ini</CardTitle>
+            <CardTitle>Tugas Tersedia</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
             {loadingTasks ? (

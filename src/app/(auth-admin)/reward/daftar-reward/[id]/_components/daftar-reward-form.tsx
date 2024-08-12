@@ -33,6 +33,7 @@ const rewardSchema = z.object({
     }),
   image: z
     .any()
+    .optional()
     .refine((files) => files?.length == 1, 'Harus upload satu gambar.')
     .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Ukuran maksimum adalah 5MB.`)
     .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), 'Format file tidak valid'),
@@ -57,12 +58,33 @@ const RewardForm = () => {
     },
   });
 
+  useEffect(() => {
+    const fetchRewardData = async () => {
+      if (isEditMode) {
+        try {
+          const rewardData = await RewardService.getSingleReward(params.id);
+          form.setValue('name', rewardData.data.Name);
+          form.setValue('stock', rewardData.data.Stock.toString());
+          form.setValue('price', rewardData.data.Price.toString());
+          setPreviewUrl(rewardData.data.Image);
+        } catch (error) {
+          console.error('Failed to fetch reward data:', error);
+          Swal.fire('Error', 'Gagal memuat data reward', 'error');
+        }
+      }
+    };
+
+    fetchRewardData();
+  }, [isEditMode, params.id, form]);
+
   const onSubmit = async (data: RewardFormData) => {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('stock', data.stock);
     formData.append('price', data.price);
-    formData.append('image', data.image[0]);
+    if (data.image) {
+      formData.append('image', data.image[0]);
+    }
 
     try {
       if (isEditMode) {
@@ -89,7 +111,6 @@ const RewardForm = () => {
   };
 
   useEffect(() => {
-    // Cleanup URL object on unmount
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -102,7 +123,6 @@ const RewardForm = () => {
       <h1 className="text-3xl font-bold mb-12">{isEditMode ? 'Edit Reward' : 'Tambah Reward Baru'}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Name Field */}
           <FormField
             control={form.control}
             name="name"
@@ -129,7 +149,7 @@ const RewardForm = () => {
                   Stok Reward <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type="number" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -145,14 +165,13 @@ const RewardForm = () => {
                   Harga Poin <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type="number" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Image Upload Field */}
           <FormField
             control={form.control}
             name="image"
