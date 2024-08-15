@@ -82,7 +82,7 @@ const TaskForm = () => {
 
   return (
     <div className="w-full p-6">
-      <h1 className="text-3xl font-bold mb-12">{isEditMode ? 'Edit Tugas' : 'Tambah Tugas Baru'}</h1>
+      <h1 className="mt-14 text-3xl font-bold mb-6 lg:mb-12 lg:mt-0">{isEditMode ? 'Edit Tugas' : 'Tambah Tugas Baru'}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
