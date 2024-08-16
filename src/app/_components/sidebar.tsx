@@ -33,7 +33,7 @@ const Sidebar = () => {
   }, [pathname]);
 
   const handleLogout = () => {
-    logout()
+    logout();
   };
 
   const toggleOpen = (id) => {
@@ -87,26 +87,30 @@ const Sidebar = () => {
       </div>
 
       {/* Sidebar / Mobile Menu */}
-      <div className={`
+      <div
+        className={`
         lg:block lg:static lg:min-h-screen lg:w-64
         fixed top-0 left-0 right-0 bottom-0 z-40
         bg-blue-600 text-white
         transition-transform duration-300 ease-in-out
         ${isMenuOpen ? 'translate-y-0' : '-translate-y-full lg:translate-y-0'}
-      `}>
-        <div className="p-4 lg:block hidden">
-          <div className="flex items-center mb-8">
-            <Image src="/assets/logo/logo-tugaskita.png" alt="TugasKita logo" width={40} height={40} />
-            <h1 className="text-2xl font-bold ml-2">TugasKita</h1>
+      `}
+      >
+        <div className='lg:flex lg:flex-col h-full'>
+          <div className="p-4 lg:block hidden">
+            <div className="flex items-center mb-8">
+              <Image src="/assets/logo/logo-tugaskita.png" alt="TugasKita logo" width={40} height={40} />
+              <h1 className="text-2xl font-bold ml-2">TugasKita</h1>
+            </div>
           </div>
-        </div>
 
-        <nav className="flex-grow overflow-y-auto mt-16 lg:mt-0">
-          <ul className="space-y-2 px-4">{renderNavItems(navigationItems)}</ul>
-        </nav>
+          <nav className="flex-grow overflow-y-auto mt-16 lg:mt-0">
+            <ul className="space-y-2 px-4">{renderNavItems(navigationItems)}</ul>
+          </nav>
 
-        <div className="p-4 mt-auto">
-          <NavItem icon={<LogOut />} label="Logout" onClick={handleLogout} noLink={true} />
+          <div className="p-4 mt-auto">
+            <NavItem icon={<LogOut />} label="Logout" onClick={handleLogout} noLink={true} />
+          </div>
         </div>
       </div>
     </>
