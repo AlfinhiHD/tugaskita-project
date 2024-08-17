@@ -2,35 +2,31 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import MainTable from "@/app/_components/main-table";
 
 import { useRouter } from "next/navigation";
 import useDaftarReward from "../_hooks/useDaftarReward";
+import { RewardListSkeleton } from "@/app/_components/skeletons";
 
 const RewardList = () => {
-
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     rewards,
-    isDetailDialogOpen,
-    setIsDetailDialogOpen,
-    selectedReward,
+    loadingRewards,
     columns,
   } = useDaftarReward();
 
+  if (loadingRewards) {
+    return <RewardListSkeleton />;
+  }
+
   return (
-    <div className="p-8">
+    <div className="page-wrapper">
       <div className="flex flex-col justify-between mb-4 mt-14 gap-y-4 lg:mt-0 lg:flex-row lg:mb-6">
         <h1 className="text-3xl font-bold">Daftar Reward</h1>
-        <Button onClick={() => router.push('/reward/daftar-reward/form')}>
+        <Button onClick={() => router.push("/reward/daftar-reward/form")}>
           <Plus className="h-5 w-5 mr-2" />
           Tambah Reward Baru
         </Button>
@@ -42,27 +38,6 @@ const RewardList = () => {
         searchable={true}
         itemsPerPage={10}
       />
-
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Detail Reward</DialogTitle>
-          </DialogHeader>
-          {selectedReward && (
-            <div>
-              <p>
-                <strong>Nama:</strong> {selectedReward.name}
-              </p>
-              <p>
-                <strong>Stok:</strong> {selectedReward.stok}
-              </p>
-              <p>
-                <strong>Point:</strong> {selectedReward.points}
-              </p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

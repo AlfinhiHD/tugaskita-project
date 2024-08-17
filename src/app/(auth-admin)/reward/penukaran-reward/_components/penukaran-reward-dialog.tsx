@@ -5,7 +5,7 @@ import { Pencil } from 'lucide-react';
 import Image from 'next/image';
 
 const PenukaranRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
-  if (!reward) return null; // Ensure reward is not null before rendering
+  if (!reward) return null;
 
   return (
     <Dialog open={openDialog === reward.id} onOpenChange={(open) => setOpenDialog(open ? reward.id : null)}>
@@ -17,7 +17,7 @@ const PenukaranRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
       <DialogContent>
         <DialogHeader>
           <Image src="/assets/images/dialog-header.png" alt="Dialog Header" width={32} height={36} />
-          <DialogTitle>{reward.rewardName}</DialogTitle>
+          <DialogTitle>{reward.reward_name} {"("}{reward.amount}{") pcs"} </DialogTitle>
           <div
             className={`rounded-xl py-2 px-3 font-semibold ${
               reward.status === 'Diterima'
@@ -36,19 +36,23 @@ const PenukaranRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
           <div>
             <p className="text-base/8">
               <strong>Nama Siswa : </strong>
-              <span className="font-light">{reward.studentName}</span>
+              <span className="font-light">{reward.user_name}</span>
             </p>
             <p className="text-base/8 mt-2">
               <strong>Tanggal Pengajuan : </strong>
-              <span className="font-light">{reward.date}</span>
+              <span className="font-light">{reward.created_at}</span>
             </p>
             <p className="text-base/8 mt-2">
               <strong>Harga Item : </strong>
-              <span className="font-light">{reward.hargaItem}</span>
+              <span className="font-light">{reward.price}</span>
             </p>
             <p className="text-base/8 mt-2">
-              <strong>Harga Item : </strong>
-              <span className="font-light">{reward.totalPoints}</span>
+              <strong>Jumlah Item : </strong>
+              <span className="font-light">{reward.amount}</span>
+            </p>
+            <p className="text-base/8 mt-2">
+              <strong>Total Harga : </strong>
+              <span className="font-light">{reward.total_price}</span>
             </p>
           </div>
         </div>

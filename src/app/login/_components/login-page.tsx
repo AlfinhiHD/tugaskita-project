@@ -16,12 +16,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { LoginValue } from "@/app/_constant/global-types";
-import axios from "axios";
+import instance from "@/app/_utils/axios.instance";
 import { useAuth } from "@/app/_hooks/useAuth";
 import Swal from "sweetalert2";
-import instance from "@/app/_utils/axios.instance";
 
 const formSchema = z.object({
   email: z
@@ -37,7 +36,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const [authError, setAuthError] = React.useState("");
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const auth = useAuth();
   const { login } = auth;
 
@@ -53,8 +52,10 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const onSubmit = async (values: LoginValue) => {
+    setIsLoading(true);
+    setAuthError("");
     console.log(values);
-    const {email, password} = values;
+    const { email, password } = values;
     try {
       const response = await instance.post("/user/login", {
         email,
@@ -68,8 +69,10 @@ export default function LoginPage() {
       }
     } catch (error) {
       setAuthError("Email atau password ada yang salah!");
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -148,7 +151,6 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              {authError && <p className="text-red-500 text-sm">{authError}</p>}
               <FormField
                 control={form.control}
                 name="rememberMe"
@@ -166,8 +168,21 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" variant="default">
-                Log In
+              {authError && <p className="text-red-500 text-sm">{authError}</p>}
+              <Button
+                type="submit"
+                className="w-full"
+                variant="default"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  "Log In"
+                )}
               </Button>
             </form>
           </Form>

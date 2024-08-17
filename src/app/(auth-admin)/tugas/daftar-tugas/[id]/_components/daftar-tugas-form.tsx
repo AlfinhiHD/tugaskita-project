@@ -1,23 +1,32 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import Swal from 'sweetalert2';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import TugasService from '@/app/_services/tugas-service';
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import Swal from "sweetalert2";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import TugasService from "@/app/_services/tugas-service";
+import { Loader2 } from "lucide-react";
+import dayjs from "dayjs";
 
 const taskSchema = z.object({
-  title: z.string().min(1, { message: 'Nama tugas harus diisi' }),
-  start_date: z.string().min(1, { message: 'Tanggal mulai harus diisi' }),
-  end_date: z.string().min(1, { message: 'Tanggal selesai harus diisi' }),
-  description: z.string().min(1, { message: 'Deskripsi tugas harus diisi' }),
-  point: z.number().min(1, { message: 'Poin harus lebih besar dari 0' }),
+  title: z.string().min(1, { message: "Nama tugas harus diisi" }),
+  startDate: z.string().min(1, { message: "Tanggal mulai harus diisi" }),
+  endDate: z.string().min(1, { message: "Tanggal selesai harus diisi" }),
+  description: z.string().min(1, { message: "Deskripsi tugas harus diisi" }),
+  point: z.number().min(1, { message: "Poin harus lebih besar dari 0" }),
 });
 
 type TaskFormData = z.infer<typeof taskSchema>;
@@ -25,17 +34,17 @@ type TaskFormData = z.infer<typeof taskSchema>;
 const TaskForm = () => {
   const router = useRouter();
   const params = useParams();
-  const isEditMode = params.id !== 'form';
+  const isEditMode = params.id !== "form";
 
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: '',
-      start_date: '',
-      end_date: '',
-      description: '',
+      title: "",
+      startDate: "",
+      endDate: "",
+      description: "",
       point: 0,
     },
   });
@@ -43,16 +52,15 @@ const TaskForm = () => {
   useEffect(() => {
     const fetchTaskData = async () => {
       if (isEditMode) {
+        setIsLoading(true);
         try {
           const taskData = await TugasService.getDetailTask(params.id);
-          form.setValue('title', taskData.data.title);
-          form.setValue('start_date', taskData.data.start_date);
-          form.setValue('end_date', taskData.data.end_date);
-          form.setValue('description', taskData.data.description);
-          form.setValue('point', taskData.data.point);
+          form.reset(taskData.data);
         } catch (error) {
-          console.error('Failed to fetch task data:', error);
-          Swal.fire('Error', 'Gagal memuat data tugas', 'error');
+          console.error("Failed to fetch task data:", error);
+          Swal.fire("Error", "Gagal memuat data tugas", "error");
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -61,28 +69,46 @@ const TaskForm = () => {
   }, [isEditMode, params.id, form]);
 
   const onSubmit = async (data: TaskFormData) => {
+    setIsLoading(true);
     try {
       const formattedData = {
         ...data,
+        start_date: data.startDate,
+        end_date: data.endDate,
       };
+      delete formattedData.startDate;
+      delete formattedData.endDate;
+
+      // if (isEditMode) {
+      //   formattedData.startDate = dayjs(data.startDate).format(
+      //     "YYYY-MM-DDTHH:mm:ss.SSSSSSZ"
+      //   );
+      //   formattedData.endDate = dayjs(data.endDate).format(
+      //     "YYYY-MM-DDTHH:mm:ss.SSSSSSZ"
+      //   );
+      // }
 
       if (isEditMode) {
         await TugasService.updateTugas(params.id, formattedData);
-        Swal.fire('Success', 'Berhasil mengubah tugas!', 'success');
+        Swal.fire("Success", "Berhasil mengubah tugas!", "success");
       } else {
         await TugasService.createTugas(formattedData);
-        Swal.fire('Success', 'Berhasil menambahkan tugas baru!', 'success');
+        Swal.fire("Success", "Berhasil menambahkan tugas baru!", "success");
       }
-      router.push('/tugas/daftar-tugas');
+      router.push("/tugas/daftar-tugas");
     } catch (error) {
-      console.error('Error submitting task:', error);
-      Swal.fire('Error', 'Terjadi kesalahan saat submit data tugas', 'error');
+      console.error(error);
+      Swal.fire("Error", error.response.data.error, "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="w-full p-6">
-      <h1 className="mt-14 text-3xl font-bold mb-6 lg:mb-12 lg:mt-0">{isEditMode ? 'Edit Tugas' : 'Tambah Tugas Baru'}</h1>
+      <h1 className="mt-14 text-3xl font-bold mb-6 lg:mb-12 lg:mt-0">
+        {isEditMode ? "Edit Tugas" : "Tambah Tugas Baru"}
+      </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
@@ -104,7 +130,7 @@ const TaskForm = () => {
           <div className="flex space-x-4">
             <FormField
               control={form.control}
-              name="start_date"
+              name="startDate"
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>
@@ -120,7 +146,7 @@ const TaskForm = () => {
 
             <FormField
               control={form.control}
-              name="end_date"
+              name="endDate"
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>
@@ -166,8 +192,9 @@ const TaskForm = () => {
                     pattern="[0-9]*"
                     {...field}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/[^0-9]/g, '');
-                      field.onChange(value);
+                      const value = e.target.value.replace(/[^0-9]/g, "");
+                      const numericValue = value === "" ? 0 : Number(value);
+                      field.onChange(numericValue);
                     }}
                   />
                 </FormControl>
@@ -176,7 +203,18 @@ const TaskForm = () => {
             )}
           />
 
-          <Button type="submit">{isEditMode ? 'Simpan Perubahan' : 'Tambah Tugas'}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading...
+              </>
+            ) : isEditMode ? (
+              "Simpan Perubahan"
+            ) : (
+              "Tambah Tugas"
+            )}
+          </Button>
         </form>
       </Form>
     </div>

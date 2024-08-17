@@ -16,12 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePenukaranReward } from "../_hooks/usePenukaranReward";
+import { PenukaranRewardSkeleton } from "@/app/_components/skeletons";
 
 const PenukaranReward = () => {
   const {
-    isDetailDialogOpen,
-    setIsDetailDialogOpen,
-    selectedReward,
     searchTerm,
     setSearchTerm,
     statusFilter,
@@ -30,7 +28,17 @@ const PenukaranReward = () => {
     setDateFilter,
     columns,
     filteredData,
+    loadingRewards,
+    errorRewards,
   } = usePenukaranReward();
+
+  if (loadingRewards) {
+    return <PenukaranRewardSkeleton />;
+  }
+
+  if (errorRewards) {
+    return null;
+  }
 
   return (
     <div className="p-8">
@@ -68,33 +76,6 @@ const PenukaranReward = () => {
         searchable={false}
         itemsPerPage={10}
       />
-
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Detail Tugas</DialogTitle>
-          </DialogHeader>
-          {selectedReward && (
-            <div>
-              <p>
-                <strong>Nama Siswa:</strong> {selectedReward.studentName}
-              </p>
-              <p>
-                <strong>Reward:</strong> {selectedReward.rewardName}
-              </p>
-              <p>
-                <strong>Point:</strong> {selectedReward.points}
-              </p>
-              <p>
-                <strong>Tanggal:</strong> {selectedReward.date}
-              </p>
-              <p>
-                <strong>Status:</strong> {selectedReward.status}
-              </p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

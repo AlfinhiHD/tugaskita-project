@@ -36,16 +36,17 @@ const MainTable = ({
   useEffect(() => {
     const checkScrollable = () => {
       if (tableRef.current) {
-        setIsScrollable(tableRef.current.scrollWidth > tableRef.current.clientWidth);
+        setIsScrollable(
+          tableRef.current.scrollWidth > tableRef.current.clientWidth
+        );
       }
     };
 
     checkScrollable();
-    window.addEventListener('resize', checkScrollable);
+    window.addEventListener("resize", checkScrollable);
 
-    return () => window.removeEventListener('resize', checkScrollable);
+    return () => window.removeEventListener("resize", checkScrollable);
   }, [data]);
-
 
   const sortedAndFilteredData = useMemo(() => {
     let filteredData = searchable

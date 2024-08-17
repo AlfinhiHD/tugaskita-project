@@ -26,32 +26,46 @@ export type TopRankType = {
 }
 
 export type TinjauTugasType = {
-    Id: string;
-    Title: string;
-    UserId: string;
-    UserName: string;
+    id: string;
+    title: string;
+    user_id: string;
+    user_name: string;
     image: string;
-    Description: string;
-    Point: number;
-    Status: string;
-    Type: string;
+    description: string;
+    point: number;
+    status: string;
+    type: string;
+    message: string;
+    created_at: string;
+    updated_at: string;
+    date_for_filter?: string;
+    formatted_date?: string;
 }
 
 export type RewardType = {
-    Id: string;
-    Name: string;
-    Stock: number;
-    Price: number;
-    Image: string;
+    id: string;
+    name: string;
+    stock: number;
+    price: number;
+    image: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export type RedeemRewardType = {
-    Id: string;
-    RewardId: string;
-    RewardName: string;
-    UserId: string;
-    UserName: string;
-    Status: string
+    id: string;
+    reward_id: string;
+    reward_name: string;
+    price: number;
+    total_price: number;
+    user_id: string;
+    user_name: string;
+    status: string;
+    amount: number;
+    created_at: string;
+    updated_at: string;
+    date_for_filter?: string;
+    formatted_date?: string;
 }
 
 export type SiswaType = {

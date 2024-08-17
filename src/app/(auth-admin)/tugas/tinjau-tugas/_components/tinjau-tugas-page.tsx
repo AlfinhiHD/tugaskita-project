@@ -1,20 +1,23 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import MainTable from '@/app/_components/main-table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useTinjauTugas } from '../_hooks/useTinjauTugas';
+import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import MainTable from "@/app/_components/main-table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useTinjauTugas } from "../_hooks/useTinjauTugas";
+import { TinjauTugasSkeleton } from "@/app/_components/skeletons";
 
 const TinjauTugas = () => {
   const {
     activeTab,
     setActiveTab,
-    isDetailDialogOpen,
-    setIsDetailDialogOpen,
-    selectedTask,
     searchTerm,
     setSearchTerm,
     statusFilter,
@@ -22,36 +25,43 @@ const TinjauTugas = () => {
     dateFilter,
     setDateFilter,
     columns,
-    filteredData
+    filteredData,
+    loadingTasks,
+    errorTasks,
   } = useTinjauTugas();
 
-  console.log(filteredData)
+  if (loadingTasks) {
+    return <TinjauTugasSkeleton />;
+  }
+
+  if (errorTasks) {
+    return null;
+  }
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-8">Tinjau Tugas</h1>
+    <div className="p-4 md:p-8">
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">Tinjau Tugas</h1>
 
-      <Tabs defaultValue="submit" onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full">
-          <TabsTrigger
-            value="submit"
-            className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white bg-blue-200 text-blue-800"
-          >
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 h-auto">
+          <TabsTrigger value="Task" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
             Submit Tugas
           </TabsTrigger>
-          <TabsTrigger
-            value="pengajuan"
-            className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white bg-blue-200 text-blue-800"
-          >
+          <TabsTrigger value="Submission" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
             Pengajuan Tugas
           </TabsTrigger>
         </TabsList>
 
-        <div className="mt-8 flex justify-between">
-          <Input placeholder="Cari nama siswa..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
-          <div className="flex space-x-4">
+        <div className="mt-4 md:mt-8 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 md:space-x-4">
+          <Input
+            placeholder="Cari nama siswa..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full md:max-w-sm"
+          />
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <Select onValueChange={setStatusFilter} value={statusFilter}>
-              <SelectTrigger className="w-56">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter Status" />
               </SelectTrigger>
               <SelectContent>
@@ -61,16 +71,35 @@ const TinjauTugas = () => {
                 <SelectItem value="Ditolak">Ditolak</SelectItem>
               </SelectContent>
             </Select>
-            <Input className="w-40" type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
+            <Input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="w-full sm:w-auto"
+            />
           </div>
         </div>
 
-        <TabsContent value="submit">
-          <MainTable columns={columns} data={filteredData} searchable={false} itemsPerPage={10} />
+        <TabsContent value="Task">
+          <div className="overflow-x-auto">
+            <MainTable
+              columns={columns}
+              data={filteredData}
+              searchable={false}
+              itemsPerPage={10}
+            />
+          </div>
         </TabsContent>
 
-        <TabsContent value="pengajuan">
-          <MainTable columns={columns} data={filteredData} searchable={false} itemsPerPage={10} />
+        <TabsContent value="Submission">
+          <div className="overflow-x-auto">
+            <MainTable
+              columns={columns}
+              data={filteredData}
+              searchable={false}
+              itemsPerPage={10}
+            />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

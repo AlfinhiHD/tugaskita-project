@@ -13,7 +13,7 @@ const useDaftarReward = () => {
     data: rewards,
     error: errorTasks,
     mutate: mutateTasks,
-    isLoading: loadingTasks,
+    isLoading: loadingRewards,
   } = useSWR<ResponseDTO<RewardType[]>, Error>(["/admin-task"], () =>
     RewardService.getReward()
   );
@@ -52,9 +52,9 @@ const useDaftarReward = () => {
   };
 
   const columns = [
-    { key: 'Name', header: 'Nama Reward', sortable: true },
-    { key: 'Price', header: 'Harga (Poin)', sortable: true },
-    { key: 'Stock', header: 'Stok Reward', sortable: true },
+    { key: 'name', header: 'Nama Reward', sortable: true },
+    { key: 'price', header: 'Harga (Poin)', sortable: true },
+    { key: 'stock', header: 'Stok Reward', sortable: true },
     {
       key: 'actions',
       header: 'Aksi',
@@ -79,7 +79,7 @@ const useDaftarReward = () => {
 
   return {
     rewards : rewards?.data,
-    loadingTasks,
+    loadingRewards,
     isDetailDialogOpen,
     setIsDetailDialogOpen,
     selectedReward,

@@ -8,7 +8,7 @@ const DaftarRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
   if (!reward) return null;
 
   return (
-    <Dialog open={openDialog === reward.ID} onOpenChange={(open) => setOpenDialog(open ? reward.ID : null)}>
+    <Dialog open={openDialog === reward.id} onOpenChange={(open) => setOpenDialog(open ? reward.id : null)}>
       <DialogTrigger asChild>
         <Button variant="ghost" className="hover:bg-blue-100" size="sm">
           <Eye className="h-4 w-4" />
@@ -21,7 +21,7 @@ const DaftarRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
         </DialogHeader>
         <div className="mt-8 flex gap-8">
           <Image
-            src={reward.Image}
+            src={reward.image}
             alt="No pic found"
             width={70}
             height={70}
@@ -29,15 +29,15 @@ const DaftarRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
           ></Image>
           <div>
             <p className="text-xl/10">
-              <strong>{reward.Name}</strong>
+              <strong>{reward.name}</strong>
             </p>
             <p className="text-base/8 mt-2">
               <strong>Poin : </strong>
-              <span className="font-light">{reward.Price}</span>
+              <span className="font-light">{reward.price}</span>
             </p>
             <p className="text-base/8 mt-2">
               <strong>Stok : </strong>
-              <span className="font-light">{reward.Stock}</span>
+              <span className="font-light">{reward.stock}</span>
             </p>
           </div>
         </div>

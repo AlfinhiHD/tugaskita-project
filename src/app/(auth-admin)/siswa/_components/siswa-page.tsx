@@ -19,8 +19,6 @@ const SiswaPage = () => {
 
   const {
     siswa,
-    isDetailDialogOpen,
-    setIsDetailDialogOpen,
     selectedSiswa,
     columns,
     loadingTasks
@@ -42,30 +40,6 @@ const SiswaPage = () => {
         searchable={true}
         itemsPerPage={10}
       />
-
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Detail Tugas</DialogTitle>
-          </DialogHeader>
-          {selectedSiswa && (
-            <div>
-              <p>
-                <strong>Nama:</strong> {selectedSiswa.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedSiswa.email}
-              </p>
-              <p>
-                <strong>Total Point:</strong> {selectedSiswa.totalPoints}
-              </p>
-              <p>
-                <strong>Tugas yang diselesaikan:</strong> {selectedSiswa.tugasSelesai}
-              </p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
