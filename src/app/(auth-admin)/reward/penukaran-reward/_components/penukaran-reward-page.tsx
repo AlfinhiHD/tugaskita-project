@@ -45,17 +45,6 @@ const PenukaranReward = () => {
           className="w-full md:max-w-sm"
         />
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <Select onValueChange={setStatusFilter} value={statusFilter}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua Status</SelectItem>
-              <SelectItem value="Perlu Review">Perlu Review</SelectItem>
-              <SelectItem value="Diterima">Diterima</SelectItem>
-              <SelectItem value="Ditolak">Ditolak</SelectItem>
-            </SelectContent>
-          </Select>
           <Input
             type="date"
             value={dateFilter}

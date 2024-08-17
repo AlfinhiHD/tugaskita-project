@@ -74,5 +74,17 @@ export type SiswaType = {
     image: string;
     role: string;
     email: string;
+    religion?: string;
     total_point: string;
+}
+
+export type PelanggaranType = {
+    id: string;
+    user_id: string;
+    user_name: string;
+    point: number;
+    description: string;
+    date: string;
+    created_at: string;
+    updated_at: string
 }

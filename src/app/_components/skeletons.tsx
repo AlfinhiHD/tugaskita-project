@@ -163,3 +163,30 @@ export const SiswaPageSkeleton = () => {
     </div>
   );
 };
+
+export const PelanggaranSkeleton = () => {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <Skeleton className="h-10 w-48 mb-4 sm:mb-0" />
+        <Skeleton className="h-10 w-full sm:w-64" />
+      </div>
+      <Skeleton className="h-10 w-full sm:w-48 mb-6" />
+      <div className="space-y-4">
+        {[...Array(5)].map((_, index) => (
+          <Skeleton key={index} className="h-16 w-full" />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const PelanggaranFormSkeleton = () => (
+  <div className="space-y-6">
+    <Skeleton className="h-10 w-full" />
+    <Skeleton className="h-10 w-full" />
+    <Skeleton className="h-32 w-full" />
+    <Skeleton className="h-10 w-full" />
+    <Skeleton className="h-10 w-24" />
+  </div>
+);
