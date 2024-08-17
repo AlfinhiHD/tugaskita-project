@@ -79,15 +79,6 @@ const TaskForm = () => {
       delete formattedData.startDate;
       delete formattedData.endDate;
 
-      // if (isEditMode) {
-      //   formattedData.startDate = dayjs(data.startDate).format(
-      //     "YYYY-MM-DDTHH:mm:ss.SSSSSSZ"
-      //   );
-      //   formattedData.endDate = dayjs(data.endDate).format(
-      //     "YYYY-MM-DDTHH:mm:ss.SSSSSSZ"
-      //   );
-      // }
-
       if (isEditMode) {
         await TugasService.updateTugas(params.id, formattedData);
         Swal.fire("Success", "Berhasil mengubah tugas!", "success");
@@ -106,7 +97,7 @@ const TaskForm = () => {
 
   return (
     <div className="w-full p-6">
-      <h1 className="mt-14 text-3xl font-bold mb-6 lg:mb-12 lg:mt-0">
+      <h1 className="mt-2 text-3xl font-bold mb-6 lg:mb-12 lg:mt-0">
         {isEditMode ? "Edit Tugas" : "Tambah Tugas Baru"}
       </h1>
       <Form {...form}>

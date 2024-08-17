@@ -1,12 +1,6 @@
 "use client";
 
 import MainTable from "@/app/_components/main-table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -41,18 +35,18 @@ const PenukaranReward = () => {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-8">Penukaran Reward</h1>
-      <div className="mt-8 flex justify-between">
+    <div className="p-4 md:p-8">
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">Penukaran Reward</h1>
+      <div className="mt-4 md:mt-8 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
         <Input
           placeholder="Cari nama siswa..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
+          className="w-full md:max-w-sm"
         />
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <Select onValueChange={setStatusFilter} value={statusFilter}>
-            <SelectTrigger className="w-56">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter Status" />
             </SelectTrigger>
             <SelectContent>
@@ -63,19 +57,21 @@ const PenukaranReward = () => {
             </SelectContent>
           </Select>
           <Input
-            className="w-40"
             type="date"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
+            className="w-full sm:w-auto"
           />
         </div>
       </div>
-      <MainTable
-        columns={columns}
-        data={filteredData}
-        searchable={false}
-        itemsPerPage={10}
-      />
+      <div className="mt-6 overflow-x-auto">
+        <MainTable
+          columns={columns}
+          data={filteredData}
+          searchable={false}
+          itemsPerPage={10}
+        />
+      </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
 import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import RewardService from "@/app/_services/reward-service";
 import Swal from "sweetalert2";
 
@@ -18,7 +18,7 @@ export const usePenukaranReward = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("");
   const [openDialog, setOpenDialog] = useState(null);
-  const [formattedTinjauTugas, setFormattedTinjauTugas] = useState<
+  const [formattedPenukaranReward, setFormattedPenukaranReward] = useState<
     RedeemRewardType[]
   >([]);
 
@@ -58,7 +58,7 @@ export const usePenukaranReward = () => {
 
   useEffect(() => {
     if (rewards?.data) {
-      setFormattedTinjauTugas(
+      setFormattedPenukaranReward(
         rewards.data.map((reward) => ({
           ...reward,
           created_at: reward.created_at,
@@ -69,12 +69,15 @@ export const usePenukaranReward = () => {
     }
   }, [rewards]);
 
-  const filteredData = rewards?.data.filter(
-    (reward) =>
-      reward?.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (statusFilter === "all" || reward.status === statusFilter) &&
-      (dateFilter === "" || reward.date_for_filter === dateFilter)
-  );
+  const filteredData = useMemo(() => {
+    return formattedPenukaranReward.filter(
+      (reward) =>
+        reward?.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (statusFilter === "all" || reward.status === statusFilter) &&
+        (dateFilter === "" || reward.date_for_filter === dateFilter)
+    );
+  }, [formattedPenukaranReward, searchTerm, statusFilter, dateFilter])
+
 
   const columns = [
     { key: "user_name", header: "Nama Lengkap Siswa", sortable: true },
@@ -85,7 +88,7 @@ export const usePenukaranReward = () => {
       key: "created_at",
       header: "Tanggal",
       sortable: true,
-      render: (task: RedeemRewardType) => task.formatted_date,
+      render: (reward: RedeemRewardType) => reward.formatted_date
     },
     {
       key: "status",
@@ -97,7 +100,7 @@ export const usePenukaranReward = () => {
           ${
             reward.status === "Perlu Review"
               ? "bg-yellow-200 text-yellow-800"
-              : reward.status === "Done"
+              : reward.status === "Diterima"
               ? "bg-green-200 text-green-800"
               : "bg-red-200 text-red-800"
           }`}

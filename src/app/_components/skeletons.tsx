@@ -126,3 +126,40 @@ export const PenukaranRewardSkeleton = () => {
     </div>
   );
 };
+
+export const SiswaPageSkeleton = () => {
+  return (
+    <div className="p-4 sm:p-6 md:p-8">
+      <div className="flex flex-col justify-between mb-4 mt-14 gap-y-4 lg:mt-0 lg:flex-row lg:mb-6">
+        <Skeleton className="h-10 w-48 sm:w-64" />
+        <Skeleton className="h-10 w-40 sm:w-48" />
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-8 w-48" />
+        </div>
+
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className="flex items-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[200px]" />
+              <Skeleton className="h-4 w-[150px]" />
+            </div>
+          </div>
+        ))}
+
+        <div className="flex items-center justify-between mt-4">
+          <Skeleton className="h-8 w-24" />
+          <div className="flex space-x-2">
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-8" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

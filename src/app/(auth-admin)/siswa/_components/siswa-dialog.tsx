@@ -14,31 +14,33 @@ const SiswaDialog = ({ siswa, openDialog, setOpenDialog }) => {
           <Eye className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[40%] pb-12">
-        <DialogHeader>
+      <DialogContent className="w-[90vw] max-w-[500px] pb-12 sm:w-[80vw]">
+        <DialogHeader className="flex flex-row">
           <Image src="/assets/images/dialog-header.png" alt="Dialog Header" width={32} height={36} />
-          <DialogTitle>{siswa.name}</DialogTitle>
+          <DialogTitle className="text-center mt-2">{siswa.name}</DialogTitle>
         </DialogHeader>
-        <div className="mt-8 flex gap-8">
-          <Image
-            src="/assets/images/default-image.jpg"
-            alt="No pic found"
-            width={70}
-            height={70}
-            className="w-1/2 h-auto object-contain"
-          ></Image>
-          <div>
-            <p className="text-base/8 mt-2">
+        <div className="mt-8 flex flex-col sm:flex-row gap-8">
+          <div className="w-full sm:w-1/2 flex justify-center">
+            <Image
+              src={siswa.image ? siswa.image : "/assets/images/default-image.jpg"}
+              alt="No pic found"
+              width={140}
+              height={140}
+              className="w-auto h-auto max-w-full max-h-[140px] object-contain"
+            />
+          </div>
+          <div className="w-full sm:w-1/2">
+            <p className="text-sm sm:text-base mt-2">
               <strong>Email : </strong>
-              <span className="font-light">{siswa.email}</span>
+              <span className="font-light break-all">{siswa.email}</span>
             </p>
-            <p className="text-base/8 mt-2">
+            <p className="text-sm sm:text-base mt-2">
+              <strong>Poin bulan ini : </strong>
+              <span className="font-light">{siswa.point}</span>
+            </p>
+            <p className="text-sm sm:text-base mt-2">
               <strong>Total Poin : </strong>
-              <span className="font-light">{siswa.totalPoints}</span>
-            </p>
-            <p className="text-base/8 mt-2">
-              <strong>Tugas Diselesaikan : </strong>
-              <span className="font-light">{siswa.tugasSelesai}</span>
+              <span className="font-light">{siswa.total_point}</span>
             </p>
           </div>
         </div>

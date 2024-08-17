@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ResponseDTO, SiswaType } from '@/app/_constant/global-types';
 import SiswaService from '@/app/_services/siswa-service';
 import useSWR from 'swr';
@@ -11,10 +11,10 @@ import Swal from 'sweetalert2';
 const useSiswa = () => {
   const {
     data: siswa,
-    error: errorTasks,
-    mutate: mutateTasks,
-    isLoading: loadingTasks,
-  } = useSWR<ResponseDTO<SiswaType[]>, Error>(['/admin-task'], () => SiswaService.getAllSiswa());
+    error: errorSiswa,
+    mutate: mutateSiswa,
+    isLoading: loadingSiswa,
+  } = useSWR<ResponseDTO<SiswaType[]>, Error>(['/user/profile'], () => SiswaService.getAllSiswa());
 
   const [openDialog, setOpenDialog] = useState(null);
 
@@ -27,6 +27,16 @@ const useSiswa = () => {
     setSelectedSiswa(siswa);
     setIsDetailDialogOpen(true);
   };
+
+  useEffect(() => {
+    if (errorSiswa) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error loading data. Please refresh the page and check your internet connection.",
+      });
+    }
+  }, [errorSiswa]);
 
   const handleDeleteClick = async (siswaId) => {
     const result = await Swal.fire({
@@ -41,7 +51,7 @@ const useSiswa = () => {
     if (result.isConfirmed) {
       try {
         await SiswaService.deleteSiswa(siswaId);
-        mutateTasks();
+        mutateSiswa();
         Swal.fire('Berhasil!', 'Data siswa berhasil dihapus dengan sukses.', 'success');
       } catch (error) {
         Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data siswa.', 'error');
@@ -52,7 +62,8 @@ const useSiswa = () => {
   const columns = [
     { key: 'name', header: 'Nama Siswa', sortable: true },
     { key: 'email', header: 'Email', sortable: true },
-    { key: 'point', header: 'Total Point', sortable: true },
+    { key: 'point', header: 'Point Bulan Ini', sortable: true },
+    { key: 'total_point', header: 'Total Point', sortable: true },
     {
       key: 'actions',
       header: 'Aksi',
@@ -72,7 +83,7 @@ const useSiswa = () => {
 
   return {
     siswa: siswa?.data,
-    loadingTasks,
+    loadingSiswa,
     isDetailDialogOpen,
     setIsDetailDialogOpen,
     selectedSiswa,
