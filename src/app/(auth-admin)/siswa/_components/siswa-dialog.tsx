@@ -35,6 +35,10 @@ const SiswaDialog = ({ siswa, openDialog, setOpenDialog }) => {
               <span className="font-light break-all">{siswa.email}</span>
             </p>
             <p className="text-sm sm:text-base mt-2">
+              <strong>Agama : </strong>
+              <span className="font-light break-all">{siswa.religion}</span>
+            </p>
+            <p className="text-sm sm:text-base mt-2">
               <strong>Poin bulan ini : </strong>
               <span className="font-light">{siswa.point}</span>
             </p>

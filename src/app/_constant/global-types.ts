@@ -74,7 +74,7 @@ export type SiswaType = {
     image: string;
     role: string;
     email: string;
-    religion?: string;
+    religion: string;
     total_point: string;
 }
 

@@ -19,6 +19,13 @@ import {
 import SiswaService from "@/app/_services/siswa-service";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -31,6 +38,9 @@ const ACCEPTED_IMAGE_TYPES = [
 const baseSchema = {
   name: z.string().min(1, { message: "Nama siswa harus diisi" }),
   email: z.string().email({ message: "Email tidak valid" }),
+  religion: z.enum(["Islam", "Kristen", "Katolik", "Hindu", "Buddha"], {
+    required_error: "Agama harus dipilih",
+  }),
 };
 
 const createSchema = z
@@ -107,6 +117,7 @@ const StudentForm = () => {
       password: "",
       confirmPassword: "",
       image: undefined,
+      religion: "",
     },
   });
 
@@ -118,6 +129,7 @@ const StudentForm = () => {
           const studentData = await SiswaService.getSingleSiswa(params.id);
           form.setValue("name", studentData.data.name);
           form.setValue("email", studentData.data.email);
+          form.setValue("religion", studentData.data.religion || "");
           setPreviewUrl(studentData.data.image);
         } catch (error) {
           console.error("Failed to fetch student data:", error);
@@ -136,6 +148,7 @@ const StudentForm = () => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("email", data.email);
+    formData.append("religion", data.religion);
 
     if (data.password) {
       formData.append("password", data.password);
@@ -213,6 +226,37 @@ const StudentForm = () => {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="religion"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Agama <span className="text-red-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  value={field.value || undefined}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih Agama" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Islam">Islam</SelectItem>
+                    <SelectItem value="Kristen">Kristen</SelectItem>
+                    <SelectItem value="Katolik">Katolik</SelectItem>
+                    <SelectItem value="Hindu">Hindu</SelectItem>
+                    <SelectItem value="Buddha">Buddha</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -318,7 +362,6 @@ const StudentForm = () => {
               "Tambah Siswa"
             )}
           </Button>
-
         </form>
       </Form>
     </div>

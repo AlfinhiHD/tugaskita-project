@@ -46,15 +46,15 @@ const rewardSchema = z.object({
   image: z
     .any()
     .optional()
-    .refine((files) => files?.length == 1, "Harus upload satu gambar.")
-    .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran maksimum adalah 5MB.`
-    )
-    .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format file tidak valid"
-    ),
+    // .refine((files) => files?.length == 1, "Harus upload satu gambar.")
+    // .refine(
+    //   (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+    //   `Ukuran maksimum adalah 5MB.`
+    // )
+    // .refine(
+    //   (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+    //   "Format file tidak valid"
+    // ),
 });
 
 type RewardFormData = z.infer<typeof rewardSchema>;

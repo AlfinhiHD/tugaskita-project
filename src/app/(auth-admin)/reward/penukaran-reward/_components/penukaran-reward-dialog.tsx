@@ -83,6 +83,7 @@ const PenukaranRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
       setShowForm(false);
       form.reset();
       setIsSubmitting(false);
+      window.location.reload()
     }
   };
 
