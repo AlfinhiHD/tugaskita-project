@@ -16,6 +16,7 @@ import instance from "@/app/_utils/axios.instance";
 const useDashboard = () => {
   const [openDialog, setOpenDialog] = useState(null);
   const [todaysTasks, setTodaysTasks] = useState<TugasType[]>([]);
+  const [topRankSorted, setTopRankSorted] = useState<TopRankType[]>([])
 
   const {
     data: tasks,
@@ -88,6 +89,11 @@ const useDashboard = () => {
     return () => clearInterval(dailyCheck);
   }, []);
 
+  useEffect(() => {
+    const sortedTopRank = topRank?.data?.sort((a, b) => b.point - a.point) || [];
+    setTopRankSorted(sortedTopRank)
+  }, [topRank])
+
   const resetMonthlyPoints = async () => {
     if (!canResetMonthlyPoints) return;
 
@@ -159,9 +165,12 @@ const useDashboard = () => {
     }
   };
 
+  
+
+
   return {
     todaysTasks: tasks?.data,
-    topRank: topRank?.data,
+    topRank: topRankSorted,
     columns,
     loadingtopRank,
     loadingTasks,
