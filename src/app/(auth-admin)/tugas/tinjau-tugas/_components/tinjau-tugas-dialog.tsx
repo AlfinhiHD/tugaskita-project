@@ -44,17 +44,17 @@ const TinjauTugasDialog = ({
   openDialog,
   setOpenDialog,
 }) => {
-  if (!task) return null;
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [actionType, setActionType] = useState(null);
 
-  const schema = task.type === "Submission" ? submissionSchema : taskSchema;
+  const schema = task?.type === "Submission" ? submissionSchema : taskSchema;
 
   const form = useForm<any>({
     resolver: zodResolver(schema),
   });
+
+  if (!task) return null;
 
   const handleAction = (type) => {
     setActionType(type);
