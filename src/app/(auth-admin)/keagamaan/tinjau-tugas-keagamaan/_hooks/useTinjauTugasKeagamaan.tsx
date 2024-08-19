@@ -24,20 +24,25 @@ export const useTinjauTugasKeagamaan = () => {
     return dateString.split('T')[0];
   };
 
+  type CombinedTaskResult = ResponseDTO<(SubmitKeagamaanTaskType | RequestKeagamaanTaskType)[]>;
+
+  const fetchTasks = async (): Promise<CombinedTaskResult> => {
+    const [submitTasks, requestTasks] = await Promise.all([
+      KeagamaanService.getAllUserSubmitReligionTugas(),
+      KeagamaanService.getAllUserReqReligionTugas()
+    ]);
+    return {
+      data: [...submitTasks.data, ...requestTasks.data],
+      message: "Tasks fetched successfully",
+    };
+  };
+
   const {
     data: tasks,
     error: errorTasks,
     mutate: mutateTasks,
     isLoading: loadingTasks,
-  } = useSWR<ResponseDTO<(SubmitKeagamaanTaskType | RequestKeagamaanTaskType)[]>, Error>(
-    ['/admin-task/religion/user', '/admin-task/religion/user-req'],
-    () => Promise.all([
-      KeagamaanService.getAllUserSubmitReligionTugas(),
-      KeagamaanService.getAllUserReqReligionTugas()
-    ]).then(([submitTasks, requestTasks]) => ({
-      data: [...submitTasks.data, ...requestTasks.data]
-    }))
-  );
+  } = useSWR<CombinedTaskResult>('/admin-task/religion', fetchTasks);
 
   useEffect(() => {
     if (errorTasks) {

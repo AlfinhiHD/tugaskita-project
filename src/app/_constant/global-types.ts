@@ -121,6 +121,7 @@ export type SubmitKeagamaanTaskType = {
     task_name: string;
     user_id: string;
     username: string;
+    user_name?: string;
     image: string;
     type: string;
     description: string;
@@ -128,6 +129,7 @@ export type SubmitKeagamaanTaskType = {
     message: string;
     created_at: string;
     updated_at: string;
+    date_for_filter?: string;
 }
 
 export type RequestKeagamaanTaskType = {
@@ -135,6 +137,7 @@ export type RequestKeagamaanTaskType = {
     title: string;
     user_id: string;
     user_name: string;
+    username?: string;
     image: string;
     type: string;
     description: string;
@@ -142,5 +145,6 @@ export type RequestKeagamaanTaskType = {
     point: number;
     message: string;
     created_at: string;
-    update_at: string
+    update_at: string;
+    date_for_filter?: string;
 }
