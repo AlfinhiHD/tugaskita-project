@@ -62,10 +62,10 @@ const AddReligionTaskDialog = ({ isOpen, onClose, onAddManual }) => {
                 <option value="">Pilih Agama</option>
                 <option value="Islam">Islam</option>
                 <option value="Kristen">Kristen</option>
-                <option value="Katolik">Katolik</option>
+                {/* <option value="Katolik">Katolik</option>
                 <option value="Hindu">Hindu</option>
                 <option value="Buddha">Buddha</option>
-                <option value="Konghucu">Konghucu</option>
+                <option value="Konghucu">Konghucu</option> */}
               </select>
               <Button 
                 onClick={handleCreateAutoTask} 

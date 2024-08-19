@@ -27,9 +27,7 @@ const PelanggaranPage = () => {
   }
 
   if (errorPelanggaran) {
-    return (
-      <div className="p-4 text-center text-red-500">Error loading data</div>
-    );
+    return null
   }
 
   return (

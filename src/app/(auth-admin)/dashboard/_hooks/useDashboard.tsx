@@ -36,6 +36,16 @@ const useDashboard = () => {
     SiswaService.getTopRank()
   );
 
+  useEffect(() => {
+    if (errorTasks || errortopRank) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error loading data. Please refresh the page and check your internet connection.",
+      });
+    }
+  }, [errorTasks || errortopRank]);
+
   // useEffect(() => {
   //   if (tasks?.data) {
   //     const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd');
@@ -177,6 +187,8 @@ const useDashboard = () => {
     canResetMonthlyPoints,
     resetMonthlyPoints,
     resetSemesterPoints,
+    errorTasks,
+    errortopRank
   };
 };
 

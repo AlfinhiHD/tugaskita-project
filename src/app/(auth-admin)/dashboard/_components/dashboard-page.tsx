@@ -20,7 +20,13 @@ const Dashboard = () => {
     canResetMonthlyPoints,
     resetMonthlyPoints,
     resetSemesterPoints,
+    errorTasks,
+    errortopRank
   } = useDashboard();
+
+  if(errorTasks || errortopRank) {
+    return null;
+  }
 
   return (
     <div className="p-8 lg:px-0">

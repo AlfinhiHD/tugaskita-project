@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import Swal from "sweetalert2";
@@ -51,6 +51,18 @@ const useReligionTugas = () => {
       }
     }
   };
+
+  
+  useEffect(() => {
+    if (errorTasks) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error loading data. Please refresh the page and check your internet connection.",
+      });
+    }
+  }, [errorTasks]);
+
 
   const createAutoTask = async (religion) => {
     try {
@@ -109,6 +121,7 @@ const useReligionTugas = () => {
     isDeleting,
     handleDelete,
     createAutoTask,
+    errorTasks
   };
 };
 

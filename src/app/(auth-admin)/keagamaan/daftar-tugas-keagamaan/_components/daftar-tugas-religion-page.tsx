@@ -11,9 +11,13 @@ import AddReligionTaskDialog from "./add-tugas-religion-dialog";
 
 const ReligionTaskList = () => {
   const router = useRouter();
-  const { religionTasks, columns, loadingTasks, isDeleting } =
+  const { religionTasks, columns, loadingTasks, isDeleting, errorTasks } =
     useReligionTugas();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
+  if(errorTasks) {
+    return null;
+  }
 
   return (
     <div className="space-y-6 page-wrapper">
