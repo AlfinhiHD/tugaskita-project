@@ -128,16 +128,16 @@ const TinjauTugasKeagamaanDialog = ({
           </div>
           <div
             className={`mt-2 sm:mt-0 rounded-xl py-1 px-2 font-semibold text-xs ${
-              task.status === "Diterima"
+              task?.status === "Diterima"
                 ? "bg-green-400 text-green-800"
-                : task.status === "Perlu Review"
+                : task?.status === "Perlu Review"
                 ? "bg-yellow-400 text-yellow-800"
-                : task.status === "Ditolak"
+                : task?.status === "Ditolak"
                 ? "bg-red-400 text-red-800"
                 : "bg-gray-400"
             }`}
           >
-            {task.status}
+            {task?.status}
           </div>
         </DialogHeader>
         <div className="flex flex-col gap-4">

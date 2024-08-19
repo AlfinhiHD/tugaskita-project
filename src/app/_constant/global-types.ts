@@ -138,6 +138,7 @@ export type RequestKeagamaanTaskType = {
     image: string;
     type: string;
     description: string;
+    status: string;
     point: number;
     message: string;
     created_at: string;
