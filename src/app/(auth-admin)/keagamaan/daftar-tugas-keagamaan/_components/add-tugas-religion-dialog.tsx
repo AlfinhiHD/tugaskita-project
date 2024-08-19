@@ -33,20 +33,20 @@ const AddReligionTaskDialog = ({ isOpen, onClose, onAddManual }) => {
           <div className="flex space-x-4">
             <Button 
               onClick={() => setSelectedOption('manual')} 
-              className={`w-1/2 ${selectedOption === 'manual' ? 'bg-white text-[#1E4395]' : 'bg-[#1E4395] text-white border border-white'}`}
+              className={`w-1/2 hover:bg-slate-100 hover:text-[#1E4395] ${selectedOption === 'manual' ? 'bg-white text-[#1E4395]' : 'bg-[#1E4395] text-white border border-white'}`}
             >
               Manual
             </Button>
             <Button 
               onClick={() => setSelectedOption('auto')} 
-              className={`w-1/2 ${selectedOption === 'auto' ? 'bg-white text-[#1E4395]' : 'bg-[#1E4395] text-white border border-white'}`}
+              className={`w-1/2 hover:bg-slate-100 hover:text-[#1E4395] ${selectedOption === 'auto' ? 'bg-white text-[#1E4395]' : 'bg-[#1E4395] text-white border border-white'}`}
             >
               Otomatis
             </Button>
           </div>
 
           {selectedOption === 'manual' && (
-            <Button onClick={onAddManual} className="w-full bg-white text-[#1E4395]">
+            <Button onClick={onAddManual} className="w-full bg-white text-[#1E4395] hover:bg-slate-100">
               Lanjut ke Form Manual
             </Button>
           )}
@@ -57,7 +57,7 @@ const AddReligionTaskDialog = ({ isOpen, onClose, onAddManual }) => {
               <select 
                 onChange={(e) => setSelectedReligion(e.target.value)} 
                 value={selectedReligion}
-                className="w-full p-2 bg-white text-[#1E4395] border-none rounded-md"
+                className="w-full p-2 bg-white text-[#1E4395] border-none rounded-md "
               >
                 <option value="">Pilih Agama</option>
                 <option value="Islam">Islam</option>
@@ -70,7 +70,7 @@ const AddReligionTaskDialog = ({ isOpen, onClose, onAddManual }) => {
               <Button 
                 onClick={handleCreateAutoTask} 
                 disabled={!selectedReligion} 
-                className="w-full bg-white text-[#1E4395] disabled:bg-gray-300 disabled:text-gray-500"
+                className="w-full bg-white text-[#1E4395] disabled:bg-gray-300 disabled:text-gray-500 hover:bg-slate-100" 
               >
                 Buat Tugas Otomatis
               </Button>
