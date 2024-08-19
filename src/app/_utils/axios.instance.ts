@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const URL = "https://visiting-fanchon-upnveteranyokyakarta-c59adb2a.koyeb.app";
+export const URL = "https://various-gloriana-upnveteranyokyakarta-a70bfd42.koyeb.app";
 
 const instance = axios.create({
   baseURL: URL,
