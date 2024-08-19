@@ -97,7 +97,7 @@ const TaskForm = () => {
         await KeagamaanService.addReligionTugas(data);
         Swal.fire("Success", "Berhasil menambahkan tugas baru!", "success");
       }
-      router.push("/keagamaan/daftar-tugas");
+      router.push("/keagamaan/daftar-tugas-keagamaan");
     } catch (error) {
       console.error(error);
       Swal.fire(
