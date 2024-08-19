@@ -190,3 +190,29 @@ export const PelanggaranFormSkeleton = () => (
     <Skeleton className="h-10 w-24" />
   </div>
 );
+
+export const TinjauTugasKeagamaanSkeleton = () => {
+  return (
+    <div className="p-4 md:p-8 space-y-4">
+      <Skeleton className="h-8 w-64" />
+      <div className="space-y-2">
+        <Skeleton className="h-10 w-full" />
+        <div className="flex space-x-2">
+          <Skeleton className="h-10 w-1/2" />
+          <Skeleton className="h-10 w-1/2" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className="flex items-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

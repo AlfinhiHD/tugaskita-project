@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export type LoginValue = {
     email: string,
     password: string,
@@ -25,7 +27,7 @@ export type TopRankType = {
     point: number;
 }
 
-export type TinjauTugasType = {
+export type TinjauReqTugasType = {
     id: string;
     title: string;
     user_id: string;
@@ -35,6 +37,23 @@ export type TinjauTugasType = {
     point: number;
     status: string;
     type: string;
+    message: string;
+    created_at: string;
+    updated_at: string;
+    date_for_filter?: string;
+    formatted_date?: string;
+}
+
+export type TinjauSubmitTugasType = {
+    id: string;
+    task_id: string;
+    task_name: string;
+    user_id: string;
+    user_name: string;
+    image: string;
+    description: string;
+    status: string;
+    type:string;
     message: string;
     created_at: string;
     updated_at: string;
@@ -87,4 +106,40 @@ export type PelanggaranType = {
     date: string;
     created_at: string;
     updated_at: string
+}
+
+export type KeagamaanTaskType = {
+    id: string;
+    title: string;
+    religion: string;
+    point: number;
+}
+
+export type SubmitKeagamaanTaskType = {
+    id: string;
+    task_id: string;
+    task_name: string;
+    user_id: string;
+    username: string;
+    image: string;
+    type: string;
+    description: string;
+    status: string;
+    message: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export type RequestKeagamaanTaskType = {
+    id: string;
+    title: string;
+    user_id: string;
+    user_name: string;
+    image: string;
+    type: string;
+    description: string;
+    point: number;
+    message: string;
+    created_at: string;
+    update_at: string
 }

@@ -27,6 +27,25 @@ export const navigationItems = [
     ],
   },
   {
+    icon: ClipboardList,
+    label: "Keagamaan",
+    id: "keagamaan",
+    subItems: [
+      {
+        icon: ClipboardList,
+        label: "Daftar Tugas Keagamaan",
+        path: "/keagamaan/daftar-tugas-keagamaan",
+        id: "keagamaan-tugas-daftar",
+      },
+      {
+        icon: ClipboardList,
+        label: "Tinjau Tugas Keagamaan",
+        path: "/keagamaan/tinjau-tugas-keagamaan",
+        id: "keagamaan-tugas-pengajuan",
+      },
+    ]
+  },
+  {
     icon: Gift,
     label: "Reward",
     id: "reward",

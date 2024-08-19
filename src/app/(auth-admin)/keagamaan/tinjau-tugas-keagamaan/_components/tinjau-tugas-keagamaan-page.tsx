@@ -11,10 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTinjauTugas } from "../_hooks/useTinjauTugas";
-import { TinjauTugasSkeleton } from "@/app/_components/skeletons";
+import { useTinjauTugasKeagamaan } from "../_hooks/useTinjauTugasKeagamaan";
+import { TinjauTugasKeagamaanSkeleton } from "@/app/_components/skeletons";
 
-const TinjauTugas = () => {
+
+const TinjauTugasKeagamaan = () => {
   const {
     activeTab,
     setActiveTab,
@@ -24,34 +25,30 @@ const TinjauTugas = () => {
     setStatusFilter,
     dateFilter,
     setDateFilter,
-    SubmitColumns,
-    ReqColumns,
-    filteredDataSubmit,
-    filteredDataReq,
-    loadingTasksSubmit,
-    loadingTasksReq,
-    errorTasksReq,
-    errorTasksSubmit
-  } = useTinjauTugas();
+    columns,
+    filteredData,
+    loadingTasks,
+    errorTasks,
+  } = useTinjauTugasKeagamaan();
 
-  if (loadingTasksReq || loadingTasksSubmit) {
-    return <TinjauTugasSkeleton />;
+  if (loadingTasks) {
+    return <TinjauTugasKeagamaanSkeleton />;
   }
 
-  if (errorTasksReq || errorTasksSubmit) {
+  if (errorTasks) {
     return null;
   }
 
   return (
     <div className="p-4 md:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">Tinjau Tugas</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">Tinjau Tugas Keagamaan</h1>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 h-auto">
-          <TabsTrigger value="Task" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-            Submit Tugas
+          <TabsTrigger value="Submit" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            Upload Tugas
           </TabsTrigger>
-          <TabsTrigger value="Submission" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+          <TabsTrigger value="Request" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
             Pengajuan Tugas
           </TabsTrigger>
         </TabsList>
@@ -84,22 +81,22 @@ const TinjauTugas = () => {
           </div>
         </div>
 
-        <TabsContent value="Task">
+        <TabsContent value="Submit">
           <div className="overflow-x-auto">
             <MainTable
-              columns={SubmitColumns}
-              data={filteredDataSubmit}
+              columns={columns}
+              data={filteredData}
               searchable={false}
               itemsPerPage={10}
             />
           </div>
         </TabsContent>
 
-        <TabsContent value="Submission">
+        <TabsContent value="Request">
           <div className="overflow-x-auto">
             <MainTable
-              columns={ReqColumns}
-              data={filteredDataReq}
+              columns={columns}
+              data={filteredData}
               searchable={false}
               itemsPerPage={10}
             />
@@ -110,4 +107,4 @@ const TinjauTugas = () => {
   );
 };
 
-export default TinjauTugas;
+export default TinjauTugasKeagamaan;

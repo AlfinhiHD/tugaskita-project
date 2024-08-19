@@ -19,87 +19,74 @@ import { Pencil } from "lucide-react";
 import Image from "next/image";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import instance from "@/app/_utils/axios.instance";
+import KeagamaanService from "@/app/_services/keagamaan-service";
+import { SubmitKeagamaanTaskType, RequestKeagamaanTaskType } from "@/app/_constant/global-types";
 
-const submissionSchema = z.object({
+const schema = z.object({
   message: z.string().min(1, "Pesan harus diisi"),
-  points: z
-    .number({
-      invalid_type_error: "Point harus berupa angka",
-    })
-    .min(0, "Poin tidak boleh negatif")
+  points: z.number().min(0, "Poin tidak boleh negatif").optional(),
 });
 
-const taskSchema = z.object({
-  message: z.string().min(1, "Pesan harus diisi"),
-});
-
-const TinjauTugasDialog = ({
+const TinjauTugasKeagamaanDialog = ({
   task,
   openDialog,
   setOpenDialog,
+}: {
+  task: SubmitKeagamaanTaskType | RequestKeagamaanTaskType;
+  openDialog: string | null;
+  setOpenDialog: (id: string | null) => void;
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [actionType, setActionType] = useState(null);
+  const [actionType, setActionType] = useState<"accept" | "reject" | null>(null);
 
-  const schema = task?.type === "Submission" ? submissionSchema : taskSchema;
-
-  const form = useForm<any>({
+  const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
 
   if (!task) return null;
 
-  const handleAction = (type) => {
+  const handleAction = (type: "accept" | "reject") => {
     setActionType(type);
     setShowForm(true);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: z.infer<typeof schema>) => {
     setIsSubmitting(true);
     try {
-      const url =
-        task.type === "Submission"
-          ? `/admin-task/user/request/${task.id}`
-          : `/admin-task/user/${task.id}`;
-
       const payload = {
-        Message: data.message, //perlu di cek M besar apa m kecil
+        message: data.message,
         status: actionType === "accept" ? "Diterima" : "Ditolak",
-        ...(task.type === "Submission" && { points: data.points }),
+        ...(data.points !== undefined && { points: data.points }),
       };
 
-      const response = await instance.put(url, payload);
+      let response;
+      if ('task_name' in task) {
+        response = await KeagamaanService.updateStatusSubmitReligionTask(task.id, payload);
+      } else {
+        response = await KeagamaanService.updateStatusReqReligionTask(task.id, payload);
+      }
 
       if (response.status === 200) {
         setOpenDialog(null);
         setShowForm(false);
         form.reset();
 
-        setTimeout(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Berhasil",
-            text: `${task.type} telah ${
-              actionType === "accept" ? "diterima" : "ditolak"
-            }. Silahkan refresh browser anda.`,
-          });
-        }, 100);
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: `Tugas telah ${actionType === "accept" ? "diterima" : "ditolak"}. Silahkan refresh browser anda.`,
+        });
       }
     } catch (error) {
-      setOpenDialog(null);
-      setShowForm(false);
-      form.reset();
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: `Terjadi kesalahan saat memperbarui ${task.type}.`,
+        text: `Terjadi kesalahan saat memperbarui tugas.`,
       });
     } finally {
       setOpenDialog(null);
@@ -117,7 +104,7 @@ const TinjauTugasDialog = ({
         setOpenDialog(open ? task.id : null);
         if (!open) {
           setShowForm(false);
-          form.reset;
+          form.reset();
         }
       }}
     >
@@ -136,7 +123,7 @@ const TinjauTugasDialog = ({
               height={27}
             />
             <DialogTitle className="ml-2 text-base sm:text-lg">
-              {task.title}
+              {'task_name' in task ? task.task_name : task.title}
             </DialogTitle>
           </div>
           <div
@@ -163,14 +150,16 @@ const TinjauTugasDialog = ({
           />
           <div className="flex-1 text-sm">
             <p className="mb-1">
-              <strong>Nama Siswa:</strong> {task.user_name}
+              <strong>Nama Siswa:</strong> {'username' in task ? task.username : task.user_name}
             </p>
             <p className="mb-1">
-              <strong>Tanggal Pengajuan:</strong> {task.formatted_date}
+              <strong>Tanggal Pengajuan:</strong> {new Date(task.created_at).toLocaleString()}
             </p>
-            <p className="mb-1">
-              <strong>Point diajukan:</strong> {task.point}
-            </p>
+            {'point' in task && (
+              <p className="mb-1">
+                <strong>Point diajukan:</strong> {task.point}
+              </p>
+            )}
             <p className="mt-2">
               <strong>Keterangan Siswa:</strong>
               <br />
@@ -206,8 +195,7 @@ const TinjauTugasDialog = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Pesan{" "}
-                        {actionType === "accept" ? "Penerimaan" : "Penolakan"}
+                        Pesan {actionType === "accept" ? "Penerimaan" : "Penolakan"}
                       </FormLabel>
                       <FormControl>
                         <Textarea
@@ -223,7 +211,7 @@ const TinjauTugasDialog = ({
                   )}
                 />
 
-                {task.type === "Submission" && (
+                {'point' in task && (
                   <FormField
                     control={form.control}
                     name="points"
@@ -236,9 +224,7 @@ const TinjauTugasDialog = ({
                             placeholder="Masukkan poin"
                             className="w-full text-black text-sm"
                             {...field}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
+                            onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                         </FormControl>
                         <FormMessage />
@@ -268,4 +254,4 @@ const TinjauTugasDialog = ({
   );
 };
 
-export default TinjauTugasDialog;
+export default TinjauTugasKeagamaanDialog;
