@@ -24,6 +24,14 @@ const DetailReligionTaskDialog = ({ task, openDialog, setOpenDialog }) => {
             <p className="text-sm font-semibold">Point:</p>
             <p className="text-lg">{task.point}</p>
           </div>
+          <div>
+            <p className="text-sm font-semibold">Tanggal Mulai:</p>
+            <p className="text-lg">{task.start_date}</p>
+          </div>
+          <div>
+            <p className="text-sm font-semibold">Tanggal Berakhir:</p>
+            <p className="text-lg">{task.end_date}</p>
+          </div>
           {task.description && (
             <div>
               <p className="text-sm font-semibold">Deskripsi:</p>

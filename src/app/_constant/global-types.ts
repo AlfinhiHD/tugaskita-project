@@ -113,6 +113,11 @@ export type KeagamaanTaskType = {
     title: string;
     religion: string;
     point: number;
+    created_at: string;
+    updated_at: string;
+    end_date: string;
+    start_date: string;
+
 }
 
 export type SubmitKeagamaanTaskType = {

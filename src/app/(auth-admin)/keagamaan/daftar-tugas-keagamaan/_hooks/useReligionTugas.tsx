@@ -13,6 +13,9 @@ const useReligionTugas = () => {
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [formattedKeagamaanTask, setFormattedKeagamaanTask] = useState<
+  KeagamaanTaskType[]
+>([]);
 
   const {
     data: tasks,
@@ -23,6 +26,22 @@ const useReligionTugas = () => {
     ["/admin-task/religion"],
     () => KeagamaanService.getAllReligionTugas()
   );
+
+  const formatDate = (dateString: string) => {
+    return dateString.substring(0, 10);
+  };
+
+  useEffect(() => {
+    if (tasks?.data) {
+      setFormattedKeagamaanTask(
+        tasks.data.map((task) => ({
+          ...task,
+          start_date: formatDate(task.start_date),
+          end_date: formatDate(task.end_date)
+        }))
+      );
+    }
+  }, [tasks]);
 
   const handleDelete = async (taskId) => {
     const result = await Swal.fire({
@@ -81,6 +100,8 @@ const useReligionTugas = () => {
   const columns = [
     { key: "title", header: "Nama Task", sortable: true },
     { key: "religion", header: "Agama", sortable: true },
+    { key: "start_date", header: "Tanggal Mulai", sortable: true},
+    { key: "end_date", header: "Tanggal Berakhir", sortable: true},
     { key: "point", header: "Point", sortable: true },
     {
       key: "actions",
@@ -115,7 +136,7 @@ const useReligionTugas = () => {
   ];
 
   return {
-    religionTasks: tasks?.data,
+    religionTasks: formattedKeagamaanTask,
     columns,
     loadingTasks,
     isDeleting,
