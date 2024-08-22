@@ -90,9 +90,12 @@ export type RedeemRewardType = {
 export type SiswaType = {
     id: string;
     name: string;
+    address: string;
     image: string;
     role: string;
     email: string;
+    school: string;
+    class: string;
     religion: string;
     total_point: string;
 }
