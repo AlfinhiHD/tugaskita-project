@@ -1,5 +1,3 @@
-import { string } from "zod";
-
 export type LoginValue = {
     email: string,
     password: string,
@@ -95,7 +93,7 @@ export type SiswaType = {
     role: string;
     email: string;
     school: string;
-    class: string;
+    class: string;1
     religion: string;
     total_point: string;
 }

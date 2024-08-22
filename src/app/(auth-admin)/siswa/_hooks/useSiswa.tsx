@@ -17,6 +17,19 @@ const useSiswa = () => {
   } = useSWR<ResponseDTO<SiswaType[]>, Error>(['/user/profile'], () => SiswaService.getAllSiswa());
 
   const [openDialog, setOpenDialog] = useState(null);
+  const [updatedData, setUpdatedData] = useState([]);
+
+  useEffect(() => {
+    if(siswa) {
+      const updatedDatas = siswa.data.map(user => ({
+        ...user,
+        image: `https://restriction-tour-fake-tolerance.trycloudflare.com/${user.image.replace('public/', '')}`
+      }));
+
+      console.log(updatedDatas)
+      setUpdatedData(updatedDatas)
+    }
+  }, [siswa])
 
   const router = useRouter();
 
@@ -82,7 +95,7 @@ const useSiswa = () => {
   ];
 
   return {
-    siswa: siswa?.data,
+    siswa: updatedData,
     loadingSiswa,
     isDetailDialogOpen,
     setIsDetailDialogOpen,

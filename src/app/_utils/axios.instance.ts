@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-export const URL = "https://functional-tamiko-upnveteranyokyakarta-ea33d8de.koyeb.app";
+export const URL = "https://restriction-tour-fake-tolerance.trycloudflare.com";
+
+export const BASE_IMAGE_URL = 'https://restriction-tour-fake-tolerance.trycloudflare.com/';
 
 const instance = axios.create({
   baseURL: URL,

@@ -26,7 +26,7 @@ const SiswaDialog = ({ siswa, openDialog, setOpenDialog }) => {
               alt="No pic found"
               width={140}
               height={140}
-              className="w-auto h-auto max-w-full max-h-[140px] object-contain"
+              className="w-auto h-auto max-w-full max-h-[180px] object-contain"
             />
           </div>
           <div className="w-full sm:w-1/2">
@@ -37,6 +37,18 @@ const SiswaDialog = ({ siswa, openDialog, setOpenDialog }) => {
             <p className="text-sm sm:text-base mt-2">
               <strong>Agama : </strong>
               <span className="font-light break-all">{siswa.religion}</span>
+            </p>
+            <p className="text-sm sm:text-base mt-2">
+              <strong>Alamat : </strong>
+              <span className="font-light">{siswa.address}</span>
+            </p>
+            <p className="text-sm sm:text-base mt-2">
+              <strong>Sekolah : </strong>
+              <span className="font-light">{siswa.school}</span>
+            </p>
+            <p className="text-sm sm:text-base mt-2">
+              <strong>Kelas : </strong>
+              <span className="font-light">{siswa.class}</span>
             </p>
             <p className="text-sm sm:text-base mt-2">
               <strong>Poin bulan ini : </strong>

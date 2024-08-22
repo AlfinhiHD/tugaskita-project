@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BASE_IMAGE_URL } from "@/app/_utils/axios.instance";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -38,9 +39,10 @@ const ACCEPTED_IMAGE_TYPES = [
 const baseSchema = {
   name: z.string().min(1, { message: "Nama siswa harus diisi" }),
   email: z.string().email({ message: "Email tidak valid" }),
-  religion: z.enum(["Islam", "Kristen", "Katolik", "Hindu", "Buddha"], {
-    required_error: "Agama harus dipilih",
-  }),
+  address: z.string().min(1, { message: "Alamat harus diisi" }),
+  school: z.string().min(1, { message: "Nama sekolah harus diisi" }),
+  class: z.string().min(1, { message: "Kelas harus diisi" }),
+  religion: z.string().min(1, { message: "Agama harus dipilih" }),
 };
 
 const createSchema = z
@@ -65,7 +67,17 @@ const createSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password tidak sama",
     path: ["confirmPassword"],
-  });
+  })
+  .refine(
+    (data) =>
+      ["Islam", "Kristen", "Katolik", "Hindu", "Buddha"].includes(
+        data.religion
+      ),
+    {
+      message: "Pilih salah satu agama yang tersedia",
+      path: ["religion"],
+    }
+  );
 
 const editSchema = z
   .object({
@@ -99,7 +111,17 @@ const editSchema = z
   .refine((data) => !data.password || data.password === data.confirmPassword, {
     message: "Password tidak sama",
     path: ["confirmPassword"],
-  });
+  })
+  .refine(
+    (data) =>
+      ["Islam", "Kristen", "Katolik", "Hindu", "Buddha"].includes(
+        data.religion
+      ),
+    {
+      message: "Pilih salah satu agama yang tersedia",
+      path: ["religion"],
+    }
+  );
 
 const StudentForm = () => {
   const router = useRouter();
@@ -114,6 +136,9 @@ const StudentForm = () => {
     defaultValues: {
       name: "",
       email: "",
+      address: "",
+      school: "",
+      class: "",
       password: "",
       confirmPassword: "",
       image: undefined,
@@ -129,8 +154,18 @@ const StudentForm = () => {
           const studentData = await SiswaService.getSingleSiswa(params.id);
           form.setValue("name", studentData.data.name);
           form.setValue("email", studentData.data.email);
+          form.setValue("address", studentData.data.address);
+          form.setValue("school", studentData.data.school);
+          form.setValue("class", studentData.data.class);
           form.setValue("religion", studentData.data.religion || "");
-          setPreviewUrl(studentData.data.image);
+          const fullImageUrl = studentData.data.image
+            ? `${BASE_IMAGE_URL}${studentData.data.image.replace(
+                "public/",
+                ""
+              )}`
+            : null;
+
+          setPreviewUrl(fullImageUrl);
         } catch (error) {
           console.error("Failed to fetch student data:", error);
           Swal.fire("Error", "Gagal memuat data siswa", "error");
@@ -148,6 +183,9 @@ const StudentForm = () => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("email", data.email);
+    formData.append("address", data.address);
+    formData.append("school", data.school);
+    formData.append("class", data.class);
     formData.append("religion", data.religion);
 
     if (data.password) {
@@ -222,6 +260,54 @@ const StudentForm = () => {
               <FormItem>
                 <FormLabel>
                   Email <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Alamat <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="school"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Sekolah <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="class"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Kelas <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} />
