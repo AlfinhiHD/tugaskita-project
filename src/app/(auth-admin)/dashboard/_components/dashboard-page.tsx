@@ -21,16 +21,23 @@ const Dashboard = () => {
     resetMonthlyPoints,
     resetSemesterPoints,
     errorTasks,
-    errortopRank
+    errortopRank,
   } = useDashboard();
 
-  if(errorTasks || errortopRank) {
+  if (errorTasks || errortopRank) {
     return null;
   }
 
   return (
     <div className="p-8 lg:px-0">
-      <h1 className="font-bold text-3xl mb-8 mt-2 lg:mt-0 lg:pt-0">Dashboard</h1>
+      <h1 className="font-bold text-3xl mb-8 mt-2 lg:mt-0 lg:pt-0">
+        Dashboard
+      </h1>
+      <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-8 rounded-lg shadow-lg mb-8">
+        <h1 className="font-bold text-4xl mb-2">Selamat Datang</h1>
+        <p className="text-xl">di Website Admin TugasKita SMAN 1 Yogyakarta</p>
+      </div>
+
       <Card className="w-full bg-blue-200 mb-8">
         <CardHeader>
           <CardTitle>Reset Poin</CardTitle>
@@ -43,14 +50,12 @@ const Dashboard = () => {
           >
             Reset Poin Bulanan
           </Button>
-          <Button
-            onClick={resetSemesterPoints}
-            className="w-full sm:w-auto"
-          >
+          <Button onClick={resetSemesterPoints} className="w-full sm:w-auto">
             Reset Poin Semester
           </Button>
         </CardContent>
       </Card>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="w-full bg-blue-200">
           <CardHeader>
@@ -86,7 +91,9 @@ const Dashboard = () => {
                       {student?.name.charAt(0)}
                     </div>
                     <div className="flex-grow flex items-center justify-between">
-                      <p className="font-semibold line-clamp-1">{student.name}</p>
+                      <p className="font-semibold line-clamp-1">
+                        {student.name}
+                      </p>
                       <p className="text-sm text-gray-500 text-end min-w-[40%] lg:min-w-0">
                         {student?.point} poin
                       </p>
