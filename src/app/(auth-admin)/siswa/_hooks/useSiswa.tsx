@@ -7,6 +7,7 @@ import SiswaService from '@/app/_services/siswa-service';
 import useSWR from 'swr';
 import SiswaDialog from '../_components/siswa-dialog';
 import Swal from 'sweetalert2';
+import { BASE_IMAGE_URL } from '@/app/_utils/axios.instance';
 
 const useSiswa = () => {
   const {
@@ -23,7 +24,7 @@ const useSiswa = () => {
     if(siswa) {
       const updatedDatas = siswa.data.map(user => ({
         ...user,
-        image: `https://restriction-tour-fake-tolerance.trycloudflare.com/${user.image.replace('public/', '')}`
+        image: `${BASE_IMAGE_URL}${user.image.replace('public/', '')}`
       }));
 
       console.log(updatedDatas)

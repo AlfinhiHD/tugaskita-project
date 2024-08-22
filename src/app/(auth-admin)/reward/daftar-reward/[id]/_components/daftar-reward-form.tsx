@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 import RewardService from "@/app/_services/reward-service";
 import { useRouter, useParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { BASE_IMAGE_URL } from "@/app/_utils/axios.instance";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -86,7 +87,14 @@ const RewardForm = () => {
           form.setValue("name", rewardData.data.name);
           form.setValue("stock", rewardData.data.stock.toString());
           form.setValue("price", rewardData.data.price.toString());
-          setPreviewUrl(rewardData.data.image);
+          const fullImageUrl = rewardData.data.image
+          ? `${BASE_IMAGE_URL}${rewardData.data.image.replace(
+              "public/",
+              ""
+            )}`
+          : null;
+
+        setPreviewUrl(fullImageUrl);
         } catch (error) {
           console.error("Failed to fetch reward data:", error);
           Swal.fire("Error", "Gagal memuat data reward", "error");

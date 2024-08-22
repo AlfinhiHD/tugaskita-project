@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import KeagamaanService from '@/app/_services/keagamaan-service';
 import { ResponseDTO, SubmitKeagamaanTaskType, RequestKeagamaanTaskType } from '@/app/_constant/global-types';
 import TinjauTugasKeagamaanDialog from '../_components/tinjau-tugas-keagamaan-dialog';
+import { BASE_IMAGE_URL } from '@/app/_utils/axios.instance';
 
 export const useTinjauTugasKeagamaan = () => {
   const [activeTab, setActiveTab] = useState('Submit');
@@ -60,7 +61,8 @@ export const useTinjauTugasKeagamaan = () => {
         ...task,
         created_at: task.created_at,
         formatted_date: formatDate(task.created_at),
-        date_for_filter: formatDateForFilter(task.created_at)
+        date_for_filter: formatDateForFilter(task.created_at),
+        image: `${BASE_IMAGE_URL}${task.image.replace('public/', '')}`
       })));
     }
   }, [tasks]);
