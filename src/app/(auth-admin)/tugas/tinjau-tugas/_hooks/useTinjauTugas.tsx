@@ -4,10 +4,9 @@ import Swal from "sweetalert2";
 import TugasService from "@/app/_services/tugas-service";
 import { ResponseDTO, TinjauReqTugasType, TinjauSubmitTugasType } from "@/app/_constant/global-types";
 import TinjauTugasDialog from "../_components/tinjau-tugas-dialog";
-import { BASE_IMAGE_URL } from "@/app/_utils/axios.instance";
 
 export const useTinjauTugas = () => {
-  const [activeTab, setActiveTab] = useState("Submission");
+  const [activeTab, setActiveTab] = useState("Task");
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,7 +69,6 @@ export const useTinjauTugas = () => {
           created_at: task.created_at,
           formatted_date: formatDate(task.created_at),
           date_for_filter: formatDateForFilter(task.created_at),
-          image: `${BASE_IMAGE_URL}${task.image.replace('public/', '')}`
         }))
       );
     }

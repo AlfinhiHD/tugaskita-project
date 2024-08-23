@@ -7,35 +7,19 @@ import SiswaService from '@/app/_services/siswa-service';
 import useSWR from 'swr';
 import SiswaDialog from '../_components/siswa-dialog';
 import Swal from 'sweetalert2';
-import { BASE_IMAGE_URL } from '@/app/_utils/axios.instance';
 
 const useSiswa = () => {
+  const router = useRouter();
+  const [openDialog, setOpenDialog] = useState(null);
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
+  const [selectedSiswa, setSelectedSiswa] = useState(null);
+
   const {
     data: siswa,
     error: errorSiswa,
     mutate: mutateSiswa,
     isLoading: loadingSiswa,
   } = useSWR<ResponseDTO<SiswaType[]>, Error>(['/user/profile'], () => SiswaService.getAllSiswa());
-
-  const [openDialog, setOpenDialog] = useState(null);
-  const [updatedData, setUpdatedData] = useState([]);
-
-  useEffect(() => {
-    if(siswa) {
-      const updatedDatas = siswa.data.map(user => ({
-        ...user,
-        image: `${BASE_IMAGE_URL}${user.image.replace('public/', '')}`
-      }));
-
-      console.log(updatedDatas)
-      setUpdatedData(updatedDatas)
-    }
-  }, [siswa])
-
-  const router = useRouter();
-
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  const [selectedSiswa, setSelectedSiswa] = useState(null);
 
   const handleDetailClick = (siswa) => {
     setSelectedSiswa(siswa);
@@ -96,7 +80,7 @@ const useSiswa = () => {
   ];
 
   return {
-    siswa: updatedData,
+    siswa: siswa?.data,
     loadingSiswa,
     isDetailDialogOpen,
     setIsDetailDialogOpen,

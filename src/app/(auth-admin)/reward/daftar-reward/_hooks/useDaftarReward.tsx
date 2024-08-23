@@ -7,14 +7,12 @@ import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { BASE_IMAGE_URL } from '@/app/_utils/axios.instance';
 
 const useDaftarReward = () => {
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
-  const [updatedData, setUpdatedData] = useState([]);
 
   const {
     data: rewards,
@@ -24,16 +22,6 @@ const useDaftarReward = () => {
   } = useSWR<ResponseDTO<RewardType[]>, Error>(["/admin-task"], () =>
     RewardService.getReward()
   );
-
-  useEffect(() => {
-    if(rewards) {
-      const updatedDatas = rewards.data.map(user => ({
-        ...user,
-        image: `${BASE_IMAGE_URL}${user.image.replace('public/', '')}`
-      }));
-      setUpdatedData(updatedDatas)
-    }
-  }, [rewards])
 
   const handleDetailClick = (reward) => {
     setSelectedReward(reward);
@@ -99,7 +87,7 @@ const useDaftarReward = () => {
   ];
 
   return {
-    rewards : updatedData,
+    rewards : rewards?.data,
     loadingRewards,
     isDetailDialogOpen,
     setIsDetailDialogOpen,

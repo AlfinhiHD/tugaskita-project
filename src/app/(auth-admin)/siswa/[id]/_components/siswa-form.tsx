@@ -26,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BASE_IMAGE_URL } from "@/app/_utils/axios.instance";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -158,14 +157,14 @@ const StudentForm = () => {
           form.setValue("school", studentData.data.school);
           form.setValue("class", studentData.data.class);
           form.setValue("religion", studentData.data.religion || "");
-          const fullImageUrl = studentData.data.image
-            ? `${BASE_IMAGE_URL}${studentData.data.image.replace(
-                "public/",
-                ""
-              )}`
-            : null;
+          // const fullImageUrl = studentData.data.image
+          //   ? `${BASE_IMAGE_URL}${studentData.data.image.replace(
+          //       "public/",
+          //       ""
+          //     )}`
+          //   : null;
 
-          setPreviewUrl(fullImageUrl);
+          setPreviewUrl(studentData.data.image);
         } catch (error) {
           console.error("Failed to fetch student data:", error);
           Swal.fire("Error", "Gagal memuat data siswa", "error");
