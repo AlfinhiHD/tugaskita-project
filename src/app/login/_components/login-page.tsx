@@ -79,7 +79,7 @@ export default function LoginPage() {
       <div className="w-full md:w-1/2 bg-blue-600 flex flex-col p-20">
         <div className="flex items-center mb-8">
           <Image
-            src="/assets/logo/logo-tugaskita.png"
+            src="/assets/logo/logo-taruna-nusantara.png"
             alt="Tugas kita logo"
             width={50}
             height={50}
