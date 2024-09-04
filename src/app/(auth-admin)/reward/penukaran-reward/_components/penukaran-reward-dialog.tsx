@@ -47,6 +47,7 @@ const PenukaranRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
     try {
       const payload = {
         message: data.message,
+        status:  actionType === "accept" ? "Diterima" : "Ditolak"
       };
 
       const response = await instance.put(
@@ -83,7 +84,7 @@ const PenukaranRewardDialog = ({ reward, openDialog, setOpenDialog }) => {
       setShowForm(false);
       form.reset();
       setIsSubmitting(false);
-      window.location.reload()
+      window.location.reload();
     }
   };
 
